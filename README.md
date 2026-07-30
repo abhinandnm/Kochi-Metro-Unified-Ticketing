@@ -19,9 +19,7 @@ Kochi Metro Unified Ticketing is a smart metro and last-mile journey platform. I
 - [Passenger Booking Portal](https://kochi-metro-booking.vercel.app/) — live ticket and unified journey booking experience
 - [Driver Portal](https://driverportal-rho.vercel.app/) — live driver cluster, trip, and earnings experience
 
-### Production API
 
-- [AWS EC2 API health](https://16-170-15-32.sslip.io/api/health) — Flask API deployed behind Nginx, Gunicorn, systemd, and HTTPS
 
 ## What Unified Ticketing solves
 
