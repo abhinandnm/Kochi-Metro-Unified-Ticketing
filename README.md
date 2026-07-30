@@ -82,7 +82,7 @@ The product focuses on:
 - Passenger and Driver applications are independently deployed to Vercel.
 - Flask API is deployed on AWS EC2 and served through Nginx.
 - The deployed API is secured with HTTPS, Gunicorn workers, systemd restart management, and Nginx reverse proxying on AWS EC2.
-- EC2 deployment and Vercel environment-variable instructions: [DEPLOYMENT.md](DEPLOYMENT.md)
+
 
 ## Local development
 
