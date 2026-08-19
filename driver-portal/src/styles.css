@@ -1,55 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
 
-@media(min-width:700px){
-  body .driver-shell:not(.driver-login){width:min(1180px,calc(100% - 48px));max-width:1180px}
-  body .driver-shell.driver-login{width:min(620px,calc(100% - 48px));max-width:620px}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f1f5f9;
+  color: #153c36;
+  font-family: Manrope, sans-serif;
+  min-height: 100vh;
+}
+button { font: inherit; cursor: pointer; }
+
+.driver-shell {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #f8fafc;
+  padding-bottom: 75px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
 }
 
-@media(min-width:700px){
-  .driver-shell:not(.driver-login){
-    display:grid;
-    grid-template-columns:minmax(420px,1fr) minmax(500px,1.25fr);
-    grid-template-rows:auto 1fr;
-    width:min(1180px,calc(100% - 48px));
-    max-width:1180px;
-    padding-bottom:0;
-    align-items:stretch;
+@media(min-width: 768px) {
+  .driver-shell:not(.driver-login) {
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: calc(100vh - 40px);
+    overflow: hidden;
+    padding-bottom: 0;
+    border: 1px solid #e2e8f0;
   }
-  .driver-shell:not(.driver-login) header{grid-column:1 / -1}
-  .driver-shell:not(.driver-login) .content{
-    padding:24px 28px 84px;
-    overflow-y:auto;
-    max-height:calc(100vh - 120px);
+
+  .driver-shell:not(.driver-login) header {
+    grid-column: 1 / -1;
   }
-  .driver-shell:not(.driver-login) .exact-map-panel{
-    height:100%;
-    min-height:580px;
-    border-left:1px solid #dce6dd;
+
+  .driver-shell:not(.driver-login) .content {
+    grid-column: 1;
+    padding: 24px 28px 84px;
+    overflow-y: auto;
+    max-height: calc(100vh - 120px);
+    background: #f8fafc;
   }
-  .driver-shell:not(.driver-login) nav{
-    position:fixed;
-    right:auto;
-    bottom:20px;
-    left:50%;
-    width:min(520px,calc(100% - 96px));
-    transform:translateX(-50%);
-    border:1px solid #dce6dd;
-    border-radius:16px;
-    box-shadow:0 8px 22px #173f3220;
-    z-index:999;
+
+  .driver-shell:not(.driver-login) .exact-map-panel {
+    grid-column: 2;
+    height: 100%;
+    min-height: 560px;
+    border-left: 1px solid #e2e8f0;
   }
-  .driver-login{width:min(620px,calc(100% - 48px));max-width:620px}
+
+  .driver-shell:not(.driver-login) nav {
+    position: fixed;
+    right: auto;
+    bottom: 24px;
+    left: 50%;
+    width: min(480px, calc(100% - 64px));
+    transform: translateX(-50%);
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+  }
+
+  .driver-shell.driver-login {
+    max-width: 480px;
+    margin: 40px auto;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    min-height: auto;
+  }
 }
 
-@media(min-width:700px){body .driver-shell,body .driver-shell.driver-login,body .driver-shell:not(.driver-login){width:100%;max-width:none;min-height:100vh;margin:0;border-radius:0}}
-@media(min-width:700px){body .driver-login{grid-template-columns:1fr;padding:72px 40px}body .driver-login input,body .driver-login .primary{width:min(620px,100%);justify-self:center}body .driver-login h1,body .driver-login p,body .driver-login small{max-width:620px;justify-self:center}}
-
-*{box-sizing:border-box}
-body{margin:0;background:#122522;color:#153c36;font-family:Manrope,sans-serif}
-button{font:inherit;cursor:pointer}
-.driver-shell{position:relative;min-height:100vh;max-width:480px;margin:auto;background:#f7f8f4;padding-bottom:75px;overflow:hidden}
-
-header{display:flex;align-items:center;gap:10px;padding:16px 22px;background:#fff;border-bottom:1px solid #e2e8f0}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
 .avatar{display:grid;place-items:center;width:39px;height:39px;border-radius:50%;background:#146b61;color:#e0ed88;font-size:12px;font-weight:800}
 small{color:#79908a;font-size:9px;font-weight:800;letter-spacing:.1em}
 h1{margin:1px 0 0;font-family:'Playfair Display',serif;font-size:18px}
@@ -110,16 +146,25 @@ h1{margin:1px 0 0;font-family:'Playfair Display',serif;font-size:18px}
 /* Exact Real Map */
 .exact-map-panel{
   position:relative;
-  height:300px;
+  height:100%;
+  min-height:420px;
   overflow:hidden;
-  background:#e2e8f0;
+  background:#f1f5f9;
+  display:flex;
+  flex-direction:column;
 }
-.map-osm-frame{
+.vector-transit-map{
   width:100%;
   height:100%;
-  min-height:300px;
-  border:none;
+  min-height:420px;
   display:block;
+  object-fit:cover;
+}
+.animated-feeder-path{
+  animation:feederDash 2.5s linear infinite;
+}
+@keyframes feederDash{
+  to{stroke-dashoffset:-36}
 }
 .map-overlay-header{
   position:absolute;

@@ -695,12 +695,118 @@ export default function App() {
 
       {/* Right Column: Exact Real Dynamic Map */}
       <section className="map exact-map-panel">
-        <iframe
-          title="Kochi Transit Map"
-          className="map-osm-frame"
-          src={mapData.embedUrl}
-          loading="lazy"
-        />
+        {/* Dynamic Vector Transit Map Layer */}
+        <svg viewBox="0 0 500 450" className="vector-transit-map">
+          <defs>
+            <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f1f5f9" />
+              <stop offset="100%" stopColor="#e2e8f0" />
+            </linearGradient>
+            <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#bae6fd" />
+              <stop offset="100%" stopColor="#7dd3fc" />
+            </linearGradient>
+            <linearGradient id="metroLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#0284c7" />
+              <stop offset="100%" stopColor="#0369a1" />
+            </linearGradient>
+            <linearGradient id="feederRouteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#059669" />
+            </linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          {/* Map Base */}
+          <rect width="500" height="450" fill="url(#mapBg)" />
+
+          {/* Kochi Water Bodies / Vembanad Lake & Backwaters */}
+          <path d="M 0 0 L 80 0 Q 120 120 70 220 Q 40 300 90 450 L 0 450 Z" fill="url(#waterGrad)" opacity="0.85" />
+          <path d="M 60 160 Q 110 170 140 150 Q 110 190 60 180 Z" fill="url(#waterGrad)" opacity="0.8" />
+          <text x="18" y="240" fill="#0369a1" fontSize="10" fontWeight="bold" opacity="0.7" transform="rotate(-75 18 240)">Vembanad Lake / Arabian Sea</text>
+
+          {/* Road Network Grid */}
+          <g stroke="#cbd5e1" strokeWidth="1.5" opacity="0.6">
+            <line x1="60" y1="90" x2="480" y2="90" />
+            <line x1="60" y1="170" x2="480" y2="170" />
+            <line x1="60" y1="260" x2="480" y2="260" />
+            <line x1="60" y1="350" x2="480" y2="350" />
+            <line x1="160" y1="0" x2="160" y2="450" />
+            <line x1="280" y1="0" x2="280" y2="450" />
+            <line x1="390" y1="0" x2="390" y2="450" />
+          </g>
+
+          {/* Seaport-Airport Road (Corridor to Infopark) */}
+          <path d="M 280 260 Q 340 240 420 190 Q 460 170 470 140" fill="none" stroke="#94a3b8" strokeWidth="3" strokeDasharray="4 2" />
+          <text x="320" y="225" fill="#64748b" fontSize="8" fontWeight="600" transform="rotate(-22 320 225)">Seaport-Airport Expressway</text>
+
+          {/* KMRL Blue Metro Viaduct Line */}
+          <path
+            d="M 260 30 L 230 100 L 200 170 L 180 230 L 210 300 L 240 370 L 270 430"
+            fill="none"
+            stroke="url(#metroLineGrad)"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+
+          {/* Metro Stations Nodes */}
+          <g fill="#ffffff" stroke="#0284c7" strokeWidth="3">
+            <circle cx="260" cy="30" r="5" /><text x="272" y="34" fill="#0f172a" fontSize="9" fontWeight="bold" stroke="none">Aluva</text>
+            <circle cx="230" cy="100" r="5" /><text x="242" y="104" fill="#0f172a" fontSize="9" fontWeight="bold" stroke="none">Edappally</text>
+            <circle cx="200" cy="170" r="5" /><text x="212" y="174" fill="#0f172a" fontSize="9" fontWeight="bold" stroke="none">Kaloor</text>
+            <circle cx="180" cy="230" r="5" /><text x="110" y="234" fill="#0f172a" fontSize="9" fontWeight="bold" stroke="none">MG Road</text>
+            <circle cx="210" cy="300" r="6" stroke="#059669" strokeWidth="4" /><text x="225" y="304" fill="#0f172a" fontSize="10" fontWeight="bold" stroke="none">Vyttila Hub</text>
+            <circle cx="240" cy="370" r="5" /><text x="252" y="374" fill="#0f172a" fontSize="9" fontWeight="bold" stroke="none">Pettta</text>
+          </g>
+
+          {/* Key Destination Points */}
+          {/* Infopark Kakkanad */}
+          <g>
+            <rect x="400" y="150" width="70" height="24" rx="6" fill="#1e293b" opacity="0.9" />
+            <text x="408" y="166" fill="#ffffff" fontSize="9" fontWeight="bold">🏢 Infopark</text>
+            <circle cx="435" cy="182" r="5" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+          </g>
+          {/* Lulu Mall */}
+          <g>
+            <rect x="140" y="76" width="75" height="22" rx="6" fill="#1e293b" opacity="0.9" />
+            <text x="146" y="91" fill="#ffffff" fontSize="8" fontWeight="bold">🛍️ Lulu Mall</text>
+            <circle cx="215" cy="87" r="4" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+          </g>
+          {/* Marine Drive */}
+          <g>
+            <rect x="80" y="180" width="85" height="22" rx="6" fill="#1e293b" opacity="0.9" />
+            <text x="86" y="195" fill="#ffffff" fontSize="8" fontWeight="bold">🌊 Marine Drive</text>
+            <circle cx="165" cy="191" r="4" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+          </g>
+          {/* Fort Kochi */}
+          <g>
+            <rect x="15" y="320" width="75" height="22" rx="6" fill="#1e293b" opacity="0.9" />
+            <text x="21" y="335" fill="#ffffff" fontSize="8" fontWeight="bold">⚓ Fort Kochi</text>
+            <circle cx="50" cy="315" r="4" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+          </g>
+
+          {/* Active Feeder Route Trajectory (Vyttila -> Infopark/Corridor) */}
+          <path
+            d="M 210 300 Q 300 280 370 230 Q 410 200 435 182"
+            fill="none"
+            stroke="url(#feederRouteGrad)"
+            strokeWidth="5"
+            strokeDasharray="8 4"
+            className="animated-feeder-path"
+            filter="url(#glow)"
+          />
+
+          {/* Moving Feeder Vehicle GPS Tracker on Route */}
+          <g className="live-gps-vehicle-marker" transform="translate(320, 260)">
+            <circle cx="0" cy="0" r="14" fill="#10b981" opacity="0.25" />
+            <circle cx="0" cy="0" r="9" fill="#059669" stroke="#ffffff" strokeWidth="2" />
+            <path d="M -3 -4 L 5 0 L -3 4 Z" fill="#ffffff" transform="rotate(-35)" />
+          </g>
+        </svg>
+
         <div className="map-overlay-header">
           <div className="map-nav-pill">
             <Navigation size={15} color="#0284c7" />
