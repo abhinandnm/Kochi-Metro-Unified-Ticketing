@@ -380,9 +380,30 @@ def get_or_create_driver(db, name):
     )
     return db.execute('SELECT * FROM drivers WHERE id=?', (cursor.lastrowid,)).fetchone()
 
+def cleanup_stale_prototype_bookings(db):
+    """
+    Auto-prunes stale/inactive unassigned bookings and open clusters created > 10 minutes ago.
+    """
+    try:
+        db.execute(
+            '''UPDATE bookings SET status="cancelled" 
+               WHERE status IN ("confirmed", "open") 
+                 AND (
+                   cluster_id IS NULL AND datetime(created_at) < datetime('now', '-10 minutes')
+                   OR cluster_id IN (SELECT id FROM clusters WHERE status="open" AND driver_id IS NULL AND datetime(created_at) < datetime('now', '-10 minutes'))
+                 )'''
+        )
+        db.execute(
+            '''UPDATE clusters SET status="cancelled" 
+               WHERE status="open" AND driver_id IS NULL 
+                 AND datetime(created_at) < datetime('now', '-10 minutes')'''
+        )
+    except Exception:
+        pass
+
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r'/*': {'origins': '*'}})
+    CORS(app, resources={r"/*": {"origins": "*"}})
     initialize()
 
     @app.get('/')
@@ -664,6 +685,7 @@ def create_app():
     def clusters():
         user = get_auth_user()
         with connect() as db:
+            cleanup_stale_prototype_bookings(db)
             if user['role'] == 'admin':
                 rows = db.execute(
                     '''SELECT c.*, d.name AS driver_name, d.vehicle AS driver_vehicle, d.vehicle_type AS driver_vehicle_type
@@ -701,6 +723,21 @@ def create_app():
             
             records = [cluster_payload(db, item, user) for item in rows]
         return jsonify(clusters=records)
+
+    @app.post('/api/clusters/clear-stale')
+    @require_auth(roles=['driver', 'admin'])
+    def clear_stale():
+        with connect() as db:
+            db.execute(
+                '''UPDATE bookings SET status="cancelled" 
+                   WHERE status IN ("confirmed", "open") 
+                     AND (
+                       cluster_id IS NULL 
+                       OR cluster_id IN (SELECT id FROM clusters WHERE status="open" AND driver_id IS NULL)
+                     )'''
+            )
+            db.execute('UPDATE clusters SET status="cancelled" WHERE status="open" AND driver_id IS NULL')
+            return jsonify(status='ok', message='Stale unassigned clusters cleared.')
 
     @app.post('/api/clusters/<int:cluster_id>/accept')
     @require_auth(roles=['driver', 'admin'])
