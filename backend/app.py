@@ -382,21 +382,21 @@ def get_or_create_driver(db, name):
 
 def cleanup_stale_prototype_bookings(db):
     """
-    Auto-prunes stale/inactive unassigned bookings and open clusters created > 10 minutes ago.
+    Auto-prunes stale/inactive unassigned bookings and open clusters created > 5 minutes ago.
     """
     try:
         db.execute(
             '''UPDATE bookings SET status="cancelled" 
                WHERE status IN ("confirmed", "open") 
                  AND (
-                   cluster_id IS NULL AND datetime(created_at) < datetime('now', '-10 minutes')
-                   OR cluster_id IN (SELECT id FROM clusters WHERE status="open" AND driver_id IS NULL AND datetime(created_at) < datetime('now', '-10 minutes'))
+                   cluster_id IS NULL AND datetime(created_at) < datetime('now', '-5 minutes')
+                   OR cluster_id IN (SELECT id FROM clusters WHERE status="open" AND driver_id IS NULL AND datetime(created_at) < datetime('now', '-5 minutes'))
                  )'''
         )
         db.execute(
             '''UPDATE clusters SET status="cancelled" 
                WHERE status="open" AND driver_id IS NULL 
-                 AND datetime(created_at) < datetime('now', '-10 minutes')'''
+                 AND datetime(created_at) < datetime('now', '-5 minutes')'''
         )
     except Exception:
         pass
