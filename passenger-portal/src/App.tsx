@@ -578,7 +578,7 @@ export default function App() {
             {/* Live Availability Preview */}
             {!isUnifiedUnavailable && (
               <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#166534', margin: '10px 0' }}>
-                <strong>✓ Availability Status:</strong> Drivers online ({quotes.orbit?.available_capacity ?? 4} seats open) · Est. Pickup: ~5 min
+                <strong>✓ Feeder Rides Available:</strong> Verified partner drivers ready at destination station · Est. Pickup: ~5 min
               </div>
             )}
 
