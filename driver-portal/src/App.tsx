@@ -371,16 +371,6 @@ export default function App() {
     )
   }
 
-  const clearStaleClusters = async () => {
-    try {
-      const headers: HeadersInit = authToken ? { Authorization: `Bearer ${authToken}` } : {}
-      await fetch(`${apiBase}/clusters/clear-stale`, { method: 'POST', headers })
-      await loadClusters()
-    } catch {
-      await loadClusters()
-    }
-  }
-
   const tripsView = trip === 'complete' ? (
     <section className="completed">
       <CheckCircle2 size={42} color="#059669" />
@@ -394,12 +384,6 @@ export default function App() {
       <strong>No pending clusters at current capacity</strong>
       <p>You are marked <strong>{driverStatus}</strong> ({capacity} seats). New incoming passenger groups will appear here.</p>
       <button className="nav-button" onClick={() => void loadClusters()}><RefreshCw size={18} /> Refresh Live Clusters</button>
-      <button 
-        style={{ marginTop: '10px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '10px', padding: '8px 14px', fontSize: '11px', fontWeight: 600, color: '#475569', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', justifyContent: 'center', width: '100%' }} 
-        onClick={() => void clearStaleClusters()}
-      >
-        <Trash2 size={13} /> Clear Leftover Demo Passengers
-      </button>
     </section>
   ) : (
     <>

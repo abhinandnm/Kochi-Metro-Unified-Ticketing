@@ -954,9 +954,30 @@ def create_app():
                     'online_drivers': online_drivers,
                     'available_capacity': available_capacity,
                     'open_clusters': open_clusters,
-                    'active_clusters': active_clusters
+                    'active_clusters': active_clusters,
                 }
             )
+
+    @app.get('/api/admin/sos-alerts')
+    @require_auth(roles=['admin'])
+    def admin_sos_alerts():
+        with connect() as db:
+            rows = db.execute('''
+                SELECT s.*, b.origin, b.destination 
+                FROM sos_alerts s
+                LEFT JOIN bookings b ON s.booking_id = b.id
+                ORDER BY s.id DESC LIMIT 50
+            ''').fetchall()
+            return jsonify(alerts=[dict(r) for r in rows])
+
+    @app.post('/api/admin/clear-all')
+    @require_auth(roles=['admin'])
+    def admin_clear_all():
+        with connect() as db:
+            db.execute('UPDATE bookings SET status="cancelled" WHERE status != "completed"')
+            db.execute('UPDATE clusters SET status="cancelled" WHERE status != "completed"')
+            db.execute('UPDATE drivers SET status="AVAILABLE"')
+            return jsonify(status='ok', message='All active passenger queues and clusters successfully wiped.')
 
     return app
 
