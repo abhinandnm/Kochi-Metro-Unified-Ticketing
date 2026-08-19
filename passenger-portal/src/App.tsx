@@ -115,15 +115,6 @@ export default function App() {
         <input className="login-input" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" />
         <button className="primary-button" onClick={() => { if (userName.trim() && password === '123') { setSignedIn(true); setLoginError('') } else setLoginError('Invalid username or password.') }}>Continue <span>→</span></button>
         {loginError && <small className="login-error">{loginError}</small>}
-      <main className="driver-shell driver-login">
-        <div className="login-logo"><TrainFront size={27} /></div>
-        <small>KOCHI METRO DRIVER PORTAL</small>
-        <h1>Move the city forward.</h1>
-        <p>Sign in to receive nearby passenger clusters.</p>
-        <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="Username" />
-        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" />
-        <button className="primary" onClick={() => { if (username.trim() && password === '123') { setSignedIn(true); setLoginError('') } else setLoginError('Invalid username or password.') }}>Continue <ChevronRight size={20} /></button>
-        {loginError && <small className="driver-error">{loginError}</small>}
       </main>
     </>
   )
