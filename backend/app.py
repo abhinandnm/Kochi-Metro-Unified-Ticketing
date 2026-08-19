@@ -75,8 +75,7 @@ def get_or_create_driver(db, name):
 
 def create_app():
     app = Flask(__name__)
-    origins = [item for item in (os.getenv('PASSENGER_ORIGIN'), os.getenv('DRIVER_ORIGIN')) if item] or '*'
-    CORS(app, resources={r'/api/*': {'origins': origins}})
+    CORS(app, resources={r'/*': {'origins': '*'}})
     initialize()
 
     @app.get('/')
