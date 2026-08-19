@@ -56,9 +56,10 @@ The product focuses on:
 
 ### Passenger Booking Portal
 
-- Prototype sign-in with any username and password `123`
-- Station-only start selection and final-destination dropdown choices for the prototype
-- Standard metro ticket and recommended Unified Booking choices
+- Prototype sign-in with any username and demo password `123` (with persistent prototype disclaimer banner)
+- Station-only start selection and final-destination dropdown choices with dynamic route-based fare calculation
+- Standard metro ticket and recommended Unified Booking choices with real-time driver availability check
+- **Driver Availability & Graceful Fallback:** If zero feeder drivers are currently online in the zone, riders are immediately notified with a contextual alert and guided to continue with a Standard Metro ticket
 - Unified metro, shared last-mile, and single-payment journey summary
 - Destination-aware smart grouping with nearest-station and pickup-zone assignment
 - Guided rider flow: booking, station boarding confirmation, metro journey, arrival-zone handoff, cab/feeder confirmation, and final-destination completion
@@ -66,15 +67,23 @@ The product focuses on:
 
 ### Driver Portal
 
-- Online/offline availability controls
+- Online/offline availability controls that synchronize in real-time with the backend dispatch engine
 - Nearby grouped-passenger cluster card with route, rider count, fare, and ETA
+- Multi-tier vehicle support: dynamically displays assigned Cab (1–5 riders) or Feeder Bus (10–20 riders)
+- Sequential trip queue: handles single-driver multi-passenger queues seamlessly
 - Accept, start, and complete trip workflow
 - Earnings, wallet, navigation, and trip-history entry points
 
 ### Backend API and smart grouping
 
 - Flask REST API with Flask-CORS and SQLite storage designed for a future PostgreSQL replacement
-- Passenger booking, station lookup, journey quotes, driver availability, cluster acceptance, and admin overview endpoints
+- **Dynamic Fare Engine:** Calculates approx metro fares based on station hops and last-mile feeder charges based on destination distance
+- **Smart Grouping & Fleet Allocation:**
+  - Grouping passengers sharing the same destination zone and handoff station
+  - 1 to 5 passengers: Grouped into a single 5-seater cab
+  - 6 to 9 passengers: Split across two 5-seater cabs (e.g. 5 in one cab, remainder in another)
+  - 10 to 20 passengers: Consolidated into a high-capacity Metro Feeder Bus
+- Passenger booking, station lookup, journey quotes, driver availability tracking (`/api/drivers/status`), cluster acceptance, and admin overview endpoints
 - Destination-aware nearest-station mapping and pickup-zone assignment for grouped last-mile riders
 - Gunicorn, Nginx, and systemd production configuration for Ubuntu EC2
 
