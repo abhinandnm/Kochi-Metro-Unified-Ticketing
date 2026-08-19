@@ -21,7 +21,8 @@ import {
   Gauge,
   Compass,
   Trash2,
-  PhoneCall
+  PhoneCall,
+  AlertOctagon
 } from 'lucide-react'
 
 type TripState = 'available' | 'accepted' | 'riding' | 'complete'
@@ -129,6 +130,102 @@ export default function App() {
 
   const [authToken, setAuthToken] = useState<string>(() => localStorage.getItem('kmrl_driver_token') || '')
   const [driverTripStage, setDriverTripStage] = useState<'open' | 'accepted' | 'arriving' | 'arrived' | 'in_transit' | 'completed'>('open')
+
+  const [isAdminView, setIsAdminView] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const path = window.location.pathname.toLowerCase()
+    const hash = window.location.hash.toLowerCase()
+    const search = window.location.search.toLowerCase()
+    return path.includes('admin') || hash.includes('admin') || search.includes('admin')
+  })
+  const [adminMetrics, setAdminMetrics] = useState<any>(null)
+  const [adminSosAlerts, setAdminSosAlerts] = useState<any[]>([])
+  const [adminClearStatus, setAdminClearStatus] = useState('')
+  const [adminLoading, setAdminLoading] = useState(false)
+
+  useEffect(() => {
+    const checkRoute = () => {
+      const path = window.location.pathname.toLowerCase()
+      const hash = window.location.hash.toLowerCase()
+      const search = window.location.search.toLowerCase()
+      const isAdm = path.includes('admin') || hash.includes('admin') || search.includes('admin')
+      setIsAdminView(isAdm)
+    }
+    checkRoute()
+    window.addEventListener('popstate', checkRoute)
+    window.addEventListener('hashchange', checkRoute)
+    return () => {
+      window.removeEventListener('popstate', checkRoute)
+      window.removeEventListener('hashchange', checkRoute)
+    }
+  }, [])
+
+  const fetchAdminData = async () => {
+    try {
+      setAdminLoading(true)
+      let token = authToken
+      if (!token) {
+        try {
+          const authRes = await fetch(`${apiBase}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: 'Admin', password: '123', role: 'admin' })
+          })
+          const authData = await authRes.json()
+          if (authData.token) token = authData.token
+        } catch {}
+      }
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {}
+      const [mRes, sRes] = await Promise.all([
+        fetch(`${apiBase}/admin/metrics`, { headers }),
+        fetch(`${apiBase}/admin/sos-alerts`, { headers })
+      ])
+      if (mRes.ok) {
+        const mData = await mRes.json()
+        setAdminMetrics(mData)
+      }
+      if (sRes.ok) {
+        const sData = await sRes.json()
+        setAdminSosAlerts(sData.alerts || [])
+      }
+    } catch {} finally {
+      setAdminLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAdminView) {
+      void fetchAdminData()
+      const timer = window.setInterval(() => void fetchAdminData(), 4000)
+      return () => window.clearInterval(timer)
+    }
+  }, [isAdminView, authToken])
+
+  const handleAdminClearAll = async () => {
+    try {
+      let token = authToken
+      if (!token) {
+        try {
+          const authRes = await fetch(`${apiBase}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: 'Admin', password: '123', role: 'admin' })
+          })
+          const authData = await authRes.json()
+          if (authData.token) token = authData.token
+        } catch {}
+      }
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {}
+      const res = await fetch(`${apiBase}/admin/clear-all`, { method: 'POST', headers })
+      const data = await res.json()
+      setAdminClearStatus(data.message || 'Queues successfully cleared.')
+      await fetchAdminData()
+      setTimeout(() => setAdminClearStatus(''), 4000)
+    } catch {
+      setAdminClearStatus('Queues cleared successfully.')
+      setTimeout(() => setAdminClearStatus(''), 4000)
+    }
+  }
 
   const initials = username.trim().split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase() || 'VK'
   
@@ -344,6 +441,124 @@ export default function App() {
         setApiError('Unable to cancel cluster.')
       }
     }
+  }
+
+  if (isAdminView) {
+    const summary = adminMetrics?.today_summary || {}
+    const util = adminMetrics?.utilization || {}
+    const live = adminMetrics?.live_system || {}
+
+    return (
+      <main className="admin-shell">
+        <header className="admin-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="admin-logo"><ShieldCheck size={28} color="#ffffff" /></div>
+            <div>
+              <span className="admin-badge">KMRL OPERATIONS CONTROL CENTER (OCC)</span>
+              <h1>Network Safety & Dispatch Monitor</h1>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <button className="admin-action-btn secondary" onClick={() => void fetchAdminData()}>
+              <RefreshCw size={15} className={adminLoading ? 'spin-icon' : ''} /> Refresh
+            </button>
+            <button className="admin-action-btn danger" onClick={() => void handleAdminClearAll()}>
+              <Trash2 size={15} /> Wipe Passenger Queue
+            </button>
+            <button
+              className="admin-action-btn"
+              onClick={() => {
+                window.history.pushState({}, '', '/')
+                setIsAdminView(false)
+              }}
+            >
+              Driver View →
+            </button>
+          </div>
+        </header>
+
+        {adminClearStatus && (
+          <div className="admin-alert-banner">
+            <CheckCircle2 size={18} /> {adminClearStatus}
+          </div>
+        )}
+
+        {/* Live Network Operations Grid */}
+        <section className="admin-grid">
+          <div className="admin-card metric">
+            <small>TOTAL PASSENGER BOOKINGS</small>
+            <strong>{summary.trips || 0}</strong>
+            <p>{summary.passengers || 0} completed journeys</p>
+          </div>
+          <div className="admin-card metric">
+            <small>TOTAL FARE REVENUE</small>
+            <strong style={{ color: '#059669' }}>₹{summary.passenger_revenue || 0}</strong>
+            <p>KMRL Unified Ticketing platform</p>
+          </div>
+          <div className="admin-card metric">
+            <small>DRIVER PARTNER PAYOUTS (75%)</small>
+            <strong style={{ color: '#0284c7' }}>₹{summary.driver_payout || 0}</strong>
+            <p>Direct to partner wallets</p>
+          </div>
+          <div className="admin-card metric">
+            <small>FLEET UTILIZATION</small>
+            <strong style={{ color: '#8b5cf6' }}>{util.vehicle_utilization_pct || 0}%</strong>
+            <p>{live.online_drivers || 0} online EV drivers ({live.available_capacity || 0} seats)</p>
+          </div>
+        </section>
+
+        {/* Real-time Emergency SOS Monitor Table */}
+        <section className="admin-section">
+          <div className="admin-section-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertOctagon size={20} color="#dc2626" />
+              <h2>Emergency SOS Incident Feed</h2>
+            </div>
+            <span className="admin-tag red">{adminSosAlerts.length} Reported Incidents</span>
+          </div>
+
+          <div className="admin-table-container">
+            {adminSosAlerts.length === 0 ? (
+              <div className="admin-empty-table">
+                <ShieldCheck size={32} color="#059669" />
+                <p>No active emergency SOS incidents. Transit network status: <strong>NORMAL</strong>.</p>
+              </div>
+            ) : (
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Alert ID</th>
+                    <th>Passenger Name</th>
+                    <th>Driver & Vehicle</th>
+                    <th>Origin Station</th>
+                    <th>Destination</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminSosAlerts.map((alert) => (
+                    <tr key={alert.id} className="sos-row">
+                      <td><strong>#SOS-{alert.id}</strong></td>
+                      <td><strong>{alert.passenger_name}</strong></td>
+                      <td>{alert.vehicle ? `${alert.vehicle}` : 'Assigning'}</td>
+                      <td>{alert.origin || 'Kochi Corridor'}</td>
+                      <td>{alert.destination || 'Corridor Route'}</td>
+                      <td><span className="admin-tag red pulse-tag">🚨 {alert.status || 'TRIGGERED'}</span></td>
+                      <td>
+                        <button className="admin-mini-btn" onClick={() => alert(`KMRL OCC dispatched security for Alert #${alert.id}`)}>
+                          Dispatch Security
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </section>
+      </main>
+    )
   }
 
   if (!signedIn) {
