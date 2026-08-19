@@ -7,7 +7,7 @@ type Passenger = { id: number; passenger_name: string; destination: string; stat
 type Cluster = { id: number; origin: string; destination: string; pickup_zone: string; passenger_count: number; estimated_minutes: number; fare: number; status: 'open' | 'accepted'; driver_name?: string; passengers: Passenger[] }
 type TripRecord = { id: number; route: string; earnings: number; completedAt: string }
 
-const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8002/api'
+const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
 
 export default function App() {
   const [username, setUsername] = useState('')
