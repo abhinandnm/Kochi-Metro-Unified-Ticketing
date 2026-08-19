@@ -15,7 +15,11 @@ import {
   KeyRound,
   AlertTriangle,
   RefreshCw,
-  XCircle
+  XCircle,
+  Car,
+  Zap,
+  Gauge,
+  Compass
 } from 'lucide-react'
 
 type TripState = 'available' | 'accepted' | 'riding' | 'complete'
@@ -41,7 +45,105 @@ type Cluster = {
 }
 type TripRecord = { id: number; route: string; earnings: number; completedAt: string }
 
+const STATION_COORDS: Record<string, [number, number]> = {
+  'Aluva': [10.1098, 76.3571],
+  'Edappally': [10.0252, 76.3082],
+  'Kaloor': [9.9984, 76.2917],
+  'MG Road': [9.9723, 76.2818],
+  'Maharaja’s College': [9.9678, 76.2861],
+  'Maharajas College': [9.9678, 76.2861],
+  'Vyttila': [9.9658, 76.3195],
+  'Pettta': [9.9515, 76.3312]
+}
+
+const DESTINATION_COORDS: Record<string, [number, number]> = {
+  'Lulu Mall, Edappally': [10.0284, 76.3075],
+  'Vyttila Mobility Hub': [9.9658, 76.3195],
+  'MG Road, Kochi': [9.9723, 76.2818],
+  'Marine Drive, Kochi': [9.9797, 76.2764],
+  'Fort Kochi': [9.9658, 76.2421],
+  'Infopark, Kakkanad': [10.0108, 76.3638],
+  'SmartCity, Kakkanad': [10.0076, 76.3712],
+  'Tripunithura': [9.9442, 76.3475]
+}
+
 const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
+
+function CarGraphic({ isBus }: { isBus: boolean }) {
+  if (isBus) {
+    return (
+      <svg viewBox="0 0 320 120" style={{ width: '100%', height: 'auto', maxHeight: '110px' }}>
+        <defs>
+          <linearGradient id="busGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#0284c7" />
+            <stop offset="100%" stopColor="#0369a1" />
+          </linearGradient>
+          <linearGradient id="glassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#e0f2fe" />
+            <stop offset="100%" stopColor="#7dd3fc" />
+          </linearGradient>
+        </defs>
+        {/* Bus Body */}
+        <rect x="20" y="25" width="280" height="65" rx="12" fill="url(#busGrad)" />
+        <rect x="25" y="85" width="270" height="5" fill="#0c4a6e" />
+        {/* Front windshield */}
+        <path d="M 270 30 L 292 45 L 292 68 L 270 68 Z" fill="url(#glassGrad)" />
+        {/* Windows */}
+        <rect x="35" y="32" width="38" height="34" rx="4" fill="url(#glassGrad)" />
+        <rect x="80" y="32" width="38" height="34" rx="4" fill="url(#glassGrad)" />
+        <rect x="125" y="32" width="38" height="34" rx="4" fill="url(#glassGrad)" />
+        <rect x="170" y="32" width="38" height="34" rx="4" fill="url(#glassGrad)" />
+        <rect x="215" y="32" width="48" height="34" rx="4" fill="url(#glassGrad)" />
+        {/* Wheels */}
+        <circle cx="75" cy="92" r="16" fill="#1e293b" stroke="#64748b" strokeWidth="4" />
+        <circle cx="75" cy="92" r="6" fill="#94a3b8" />
+        <circle cx="245" cy="92" r="16" fill="#1e293b" stroke="#64748b" strokeWidth="4" />
+        <circle cx="245" cy="92" r="6" fill="#94a3b8" />
+        {/* Headlight */}
+        <rect x="290" y="70" width="8" height="8" rx="2" fill="#fef08a" />
+        {/* KMRL Feeder Decal */}
+        <text x="35" y="78" fill="#ffffff" fontSize="10" fontWeight="bold" fontFamily="sans-serif">KMRL FEEDER SHUTTLE</text>
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 320 120" style={{ width: '100%', height: 'auto', maxHeight: '110px' }}>
+      <defs>
+        <linearGradient id="carGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#0d9488" />
+          <stop offset="100%" stopColor="#115e59" />
+        </linearGradient>
+        <linearGradient id="carGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#ccfbf1" />
+          <stop offset="100%" stopColor="#5eead4" />
+        </linearGradient>
+      </defs>
+      {/* Ground Shadow */}
+      <ellipse cx="160" cy="100" rx="130" ry="8" fill="rgba(0,0,0,0.15)" />
+      {/* Car Roof & Cabin */}
+      <path d="M 75 55 Q 110 25 155 24 Q 210 25 240 55 Z" fill="url(#carGlass)" />
+      {/* Pillar */}
+      <rect x="155" y="26" width="8" height="29" fill="#0f766e" />
+      {/* Car Main Body */}
+      <path d="M 25 60 Q 30 50 55 52 L 80 54 L 240 54 Q 275 54 295 68 L 295 82 Q 295 86 285 86 L 35 86 Q 25 86 25 75 Z" fill="url(#carGrad)" />
+      {/* EV Line */}
+      <path d="M 35 70 L 285 70" stroke="#2dd4bf" strokeWidth="2" strokeDasharray="6 3" />
+      {/* Wheels */}
+      <circle cx="80" cy="86" r="16" fill="#0f172a" stroke="#475569" strokeWidth="4" />
+      <circle cx="80" cy="86" r="6" fill="#94a3b8" />
+      <circle cx="240" cy="86" r="16" fill="#0f172a" stroke="#475569" strokeWidth="4" />
+      <circle cx="240" cy="86" r="6" fill="#94a3b8" />
+      {/* Headlights */}
+      <path d="M 288 64 Q 296 66 295 72 L 284 72 Z" fill="#fef08a" />
+      {/* Taillight */}
+      <path d="M 25 64 Q 22 68 25 72 L 30 72 Z" fill="#ef4444" />
+      {/* KMRL EV Badge */}
+      <rect x="110" y="62" width="70" height="14" rx="3" fill="#ffffff" />
+      <text x="115" y="73" fill="#0f766e" fontSize="9" fontWeight="bold" fontFamily="sans-serif">KMRL EV CAB</text>
+    </svg>
+  )
+}
 
 export default function App() {
   const [username, setUsername] = useState('')
@@ -490,6 +592,26 @@ export default function App() {
     </>
   )
 
+  const mapData = useMemo(() => {
+    const origStation = activeCluster?.origin?.replace(/ Metro( Station)?/i, '').trim() || 'Vyttila'
+    const destName = activeCluster?.destination || 'Infopark, Kakkanad'
+    const origCoord = STATION_COORDS[origStation] || [9.9658, 76.3195]
+    const destCoord = DESTINATION_COORDS[destName] || [10.0108, 76.3638]
+    
+    const minLat = Math.min(origCoord[0], destCoord[0]) - 0.015
+    const maxLat = Math.max(origCoord[0], destCoord[0]) + 0.015
+    const minLon = Math.min(origCoord[1], destCoord[1]) - 0.02
+    const maxLon = Math.max(origCoord[1], destCoord[1]) + 0.02
+
+    return {
+      origStation,
+      destName,
+      origCoord,
+      destCoord,
+      embedUrl: `https://www.openstreetmap.org/export/embed.html?bbox=${minLon.toFixed(4)},${minLat.toFixed(4)},${maxLon.toFixed(4)},${maxLat.toFixed(4)}&layer=mapnik&marker=${destCoord[0].toFixed(4)},${destCoord[1].toFixed(4)}`
+    }
+  }, [activeCluster])
+
   return (
     <main className="driver-shell">
       <header>
@@ -502,7 +624,7 @@ export default function App() {
                 VERIFIED PARTNER ✓
               </span>
             </div>
-            <small style={{ color: '#64748b' }}>KL 07 CD 4531 · Sedan (EV)</small>
+            <small style={{ color: '#64748b' }}>KL 07 CD 4531 · {capacity >= 15 ? 'KMRL Feeder Bus' : capacity === 6 ? 'SUV Feeder' : 'Sedan (EV)'}</small>
           </div>
         </div>
 
@@ -521,38 +643,41 @@ export default function App() {
         </div>
       </header>
 
-      {/* Seat Capacity Selector */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 16px', background: '#f1f5f9', fontSize: '12px' }}>
-        <span>Active Vehicle Capacity:</span>
-        <select
-          value={capacity}
-          onChange={(e) => {
-            const cap = Number(e.target.value)
-            setCapacity(cap)
-            void updateDriverAvailability(driverStatus, cap)
-          }}
-          style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
-        >
-          <option value={4}>Cab / Sedan (4 seats)</option>
-          <option value={6}>SUV Feeder (6 seats)</option>
-          <option value={20}>KMRL Feeder Bus (20 seats)</option>
-        </select>
-      </div>
-
-      <section className="map">
-        <div className="map-label">
-          <Navigation size={16} />
-          <span>{activeCluster ? `${activeCluster.origin} Metro Station (${activeCluster.pickup_zone})` : 'Waiting for bookings'}</span>
-        </div>
-        <span className="pin one" />
-        <span className="pin two" />
-        <span className="route-line" />
-        <div className="map-status">
-          <span className="pulse" /> {driverStatus === 'AVAILABLE' ? 'Listening for passenger clusters' : `Driver state: ${driverStatus}`}
-        </div>
-      </section>
-
+      {/* Left Column: Driver Vehicle, Earnings, and Active Cluster Workflow */}
       <section className="content">
+        {/* Active Vehicle Card with Car Graphic */}
+        <div className="driver-vehicle-card">
+          <div className="vehicle-card-top">
+            <div>
+              <span className="vehicle-badge"><Zap size={13} /> {capacity >= 15 ? 'KMRL Feeder Shuttle' : 'KMRL Certified EV'}</span>
+              <h3 style={{ margin: '4px 0 2px 0', fontSize: '15px', color: '#0f766e' }}>
+                {capacity >= 15 ? 'Feeder Bus (20 Seats)' : capacity === 6 ? 'SUV Feeder (6 Seats)' : 'Sedan EV (4 Seats)'}
+              </h3>
+              <small style={{ color: '#64748b', fontSize: '11px' }}>Plate: KL 07 CD 4531 · 94% Battery (210 km)</small>
+            </div>
+            <div className="capacity-select-box">
+              <label style={{ fontSize: '10px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '2px' }}>Capacity</label>
+              <select
+                value={capacity}
+                onChange={(e) => {
+                  const cap = Number(e.target.value)
+                  setCapacity(cap)
+                  void updateDriverAvailability(driverStatus, cap)
+                }}
+                className="vehicle-cap-dropdown"
+              >
+                <option value={4}>Cab / Sedan (4 seats)</option>
+                <option value={6}>SUV Feeder (6 seats)</option>
+                <option value={20}>KMRL Feeder Bus (20 seats)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div className="vehicle-graphic-container">
+            <CarGraphic isBus={capacity >= 15} />
+          </div>
+        </div>
+
         <div className="earnings">
           <div>
             <small>TODAY’S EARNINGS</small>
@@ -566,6 +691,37 @@ export default function App() {
 
         {apiError && <p className="driver-error">{apiError}</p>}
         {activeView === 'trips' ? tripsView : activeView === 'history' ? historyView : walletView}
+      </section>
+
+      {/* Right Column: Exact Real Dynamic Map */}
+      <section className="map exact-map-panel">
+        <iframe
+          title="Kochi Transit Map"
+          className="map-osm-frame"
+          src={mapData.embedUrl}
+          loading="lazy"
+        />
+        <div className="map-overlay-header">
+          <div className="map-nav-pill">
+            <Navigation size={15} color="#0284c7" />
+            <div>
+              <strong>{activeCluster ? `${activeCluster.origin} Metro Station` : 'Kochi Metro Corridor'}</strong>
+              <small style={{ display: 'block', color: '#64748b' }}>
+                {activeCluster ? `Destination: ${activeCluster.destination}` : 'Listening for passenger clusters'}
+              </small>
+            </div>
+          </div>
+          {activeCluster && (
+            <div className="map-bay-badge">
+              <span>Dynamic Bay</span>
+              <strong>{activeCluster.pickup_zone}</strong>
+            </div>
+          )}
+        </div>
+
+        <div className="map-status">
+          <span className="pulse" /> {driverStatus === 'AVAILABLE' ? (activeCluster ? `Cluster Route: ${activeCluster.destination} (${activeCluster.estimated_minutes} min)` : 'Connected to KMRL Dispatch Network') : `Driver status: ${driverStatus}`}
+        </div>
       </section>
 
       <nav>
