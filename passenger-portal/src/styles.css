@@ -83,6 +83,16 @@
   min-height: auto !important;
 }
 
+@media (min-width: 700px) {
+  body .app-shell.matching.login-glass-card {
+    width: 440px !important;
+    max-width: 440px !important;
+    min-height: auto !important;
+    margin: 20px auto !important;
+    border-radius: 24px !important;
+  }
+}
+
 .login-glass-card .login-input {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
