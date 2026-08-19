@@ -176,7 +176,7 @@ export default function App() {
       }
     }
     void loadQuotes()
-    const timer = window.setInterval(() => void loadQuotes(), 3000)
+    const timer = window.setInterval(() => void loadQuotes(), 2000)
     return () => window.clearInterval(timer)
   }, [from, to])
 
@@ -773,9 +773,15 @@ export default function App() {
             </div>
 
             {/* Live Availability Preview */}
-            {!isUnifiedUnavailable && (
-              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#166534', margin: '10px 0' }}>
-                <strong>✓ Feeder Rides Available:</strong> Verified partner drivers ready at destination station · Est. Pickup: ~5 min
+            {!isUnifiedUnavailable ? (
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#166534', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', flexShrink: 0 }} />
+                <span><strong>✓ Feeder Rides Online:</strong> {quotes.orbit?.available_capacity ?? 4} seats available at destination station · Est. Pickup: ~5 min</span>
+              </div>
+            ) : (
+              <div style={{ background: '#fff1f0', border: '1px solid #ffccc7', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#cf1322', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block', flexShrink: 0 }} />
+                <span><strong>● Drivers Currently Offline:</strong> No active feeder vehicles ready at destination station.</span>
               </div>
             )}
 

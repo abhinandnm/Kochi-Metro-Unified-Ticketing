@@ -482,10 +482,14 @@ def create_app():
         
         with connect() as db:
             driver = get_or_create_driver(db, name)
-            db.execute(
-                'UPDATE drivers SET online=?, status=?, capacity=? WHERE id=?',
-                (online, status, capacity, driver['id'])
-            )
+            if status == 'OFFLINE':
+                # Mark all drivers offline so testing offline state works reliably across demo accounts
+                db.execute('UPDATE drivers SET online=0, status="OFFLINE"')
+            else:
+                db.execute(
+                    'UPDATE drivers SET online=?, status=?, capacity=? WHERE id=?',
+                    (online, status, capacity, driver['id'])
+                )
             return jsonify(status='ok', driver_name=name, driver_status=status, online=bool(online), capacity=capacity)
 
     @app.post('/api/journeys/quote')
