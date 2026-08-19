@@ -22,19 +22,19 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 
 | Portal | URL | Description |
 | :--- | :--- | :--- |
-| 🚆 **Passenger Booking Portal** | [kochi-metro-booking.vercel.app](https://kochi-metro-booking.vercel.app/) | Live unified ticket booking experience with dynamic last-mile feeder options. |
-| 🚖 **Driver Partner Portal** | [driverportal-rho.vercel.app](https://driverportal-rho.vercel.app/) | Live driver cluster acceptance, OTP validation, and wallet earnings. |
-| 🚨 **KMRL OCC Operations Center** | [kochi-metro-booking.vercel.app/admin](https://kochi-metro-booking.vercel.app/admin) | **OCC Command Center (`/admin`)**: Live Emergency SOS incident feed, network metrics, and 1-click test queue wiper. |
+| 🚆 **Passenger Booking Portal** | [kochi-metro-booking.vercel.app](https://kochi-metro-booking.vercel.app/) | Single-tap unified metro + EV feeder booking, live tracking, and emergency SOS. |
+| 🚖 **Driver Partner Portal** | [driverportal-rho.vercel.app](https://driverportal-rho.vercel.app/) | Verified EV driver matching, OTP passenger verification, dynamic bay routing, and wallet earnings. |
+| 🚨 **KMRL OCC Admin Monitor** | [kochi-metro-booking.vercel.app/admin](https://kochi-metro-booking.vercel.app/admin) or [driverportal-rho.vercel.app/admin](https://driverportal-rho.vercel.app/admin) | **Operations Control Center (OCC)**: Live Emergency SOS Feed, real-time revenue splits, and 1-click demo queue wiper. |
 
 ---
 
 > ### 🚨 KMRL OCC Operations & Safety Command Center (`/admin`)
-> Access the live transit operations & incident response cockpit directly by appending **`/admin`** to the domain:
-> 👉 **[Open KMRL OCC Admin Monitor (`/admin`)](https://kochi-metro-booking.vercel.app/admin)**
+> Access the live transit operations & incident response cockpit directly on either domain:
+> 👉 **[Open Passenger OCC Monitor (`/admin`)](https://kochi-metro-booking.vercel.app/admin)** · **[Open Driver OCC Monitor (`/admin`)](https://driverportal-rho.vercel.app/admin)**
 >
-> - **🚨 Emergency SOS Incident Feed:** Live stream of passenger emergency triggers with driver name, vehicle plate, GPS route corridor, and instant OCC dispatch controls.
-> - **📊 Real-Time Network KPIs:** Live revenue breakdown (75% driver share, 45% KMRL component), vehicle fleet utilization, and corridor passenger demand.
-> - **🧹 1-Click Passenger Queue Reset:** Admin button (`Wipe Passenger Queue`) to instantly purge abandoned prototype test bookings from the database.
+> - **🚨 Real-Time Emergency SOS Feed:** Live stream capturing passenger emergency alerts with incident IDs, assigned driver, vehicle number plate, GPS route corridor, and instant OCC dispatch controls.
+> - **📊 Real-Time Network Cockpit:** Live financial breakdown (75% driver share, 45% KMRL component, 10% operations), vehicle fleet utilization, and corridor passenger demand.
+> - **🧹 1-Click Passenger Queue Reset:** Admin button (`Wipe Passenger Queue`) and server CLI (`python backend/clear_queue.py`) to instantly purge abandoned prototype test bookings from SQLite.
 
 ---
 
@@ -79,12 +79,12 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 - **Role-Based Authentication:** Secure token-based session login (demo password `123`).
 - **Flexible Journey Modes:**
   - **Standard Metro Ticket:** Direct origin-to-destination train leg.
-  - **Unified Last-Mile Coordination:** Metro train leg + capacity-matched shared feeder cab/bus.
+  - **Unified Last-Mile Coordination:** Metro train leg + capacity-matched shared EV feeder transfer.
 - **Dynamic Exit-Station Resolution:** Automatically maps destination keywords to optimal exit hubs (e.g., *Infopark/SmartCity $\rightarrow$ Vyttila*, *Lulu Mall $\rightarrow$ Edappally*, *Fort Kochi $\rightarrow$ MG Road*).
 - **Interactive Tiered Fare Breakdown:**
   - Live cost transparency: **Metro Leg** + **Last-Mile Base** + **Distance Charge** minus **15% Shared Cluster Discount**.
   - Commercial distribution model (75% driver share, 15% KMRL component, 10% operations).
-- **Driver Availability & Graceful Fallback:** Real-time seat capacity check with 4 actionable alternatives if vehicles are offline.
+- **Live Online / Offline Feeder Status:** Real-time indicator showing active driver seat availability and alternative travel options when drivers are offline.
 - **Idempotency & Duplicate Protection:** Server-side request deduplication (`Idempotency-Key`) preventing accidental double bookings.
 - **Safety OTP Pass:** Cryptographically random 4-digit safety code generated for driver verification.
 - **Live Trip Lifecycle Tracker:** Tracks backend stages (`driver_assigned` $\rightarrow$ `arriving` $\rightarrow$ `arrived` $\rightarrow$ `in_transit` $\rightarrow$ `completed`).
@@ -92,24 +92,30 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 - **Live Trip Sharing:** Shareable emergency tracking link for family contacts.
 
 ### 2. Driver Partner Operations Portal
-- **Driver Availability & Vehicle Selector:** Toggle `AVAILABLE`, `BUSY`, or `OFFLINE` status; select active vehicle type (**Sedan EV 4-seat**, **SUV 6-seat**, or **Feeder Bus 20-seat**).
-- **Vehicle-Class Cluster Filtering:** Drivers only receive clusters matching their vehicle type and capacity (sedan drivers never see feeder buses).
+- **Driver Availability & Vehicle Selector:** Toggle `AVAILABLE`, `BUSY`, or `OFFLINE` status; select active vehicle type (**Sedan EV 4-seat** or **SUV Feeder 6-seat**).
+- **Vehicle-Class Cluster Filtering:** Drivers only receive clusters matching their vehicle type and capacity.
 - **Cluster Intelligence Card:** Route, grouped rider count, ETA, dynamic bay, detour buffer (+min), and match score (0–100%).
 - **Turn-by-Turn Navigation:** Direct integration with Google Maps to the assigned station pickup bay.
 - **Trip Lifecycle Controls:**
   - `Accept Cluster` $\rightarrow$ `Signal En Route (arriving)` $\rightarrow$ `Signal Arrived at Bay (arrived)` $\rightarrow$ `Verify Passenger OTP & Start` $\rightarrow$ `Complete & Settle`.
 - **Driver Wallet & History:** Instant 75% last-mile fare credit to wallet upon completion, with chronological ride logs.
+- **Driver Partner Responsibilities & Operating Protocol:** Clear on-screen guidelines covering zero-congestion bay staging, mandatory OTP verification, route detour limits, 100% cashless wallet payouts, emergency protocols, and 24/7 Helpline (`1800-425-0370`).
 
-### 3. Backend Engine & Routing Intelligence
+### 3. KMRL OCC Operations & Safety Command Center (`/admin`)
+- **Real-Time Emergency SOS Monitor:** Live table of all passenger emergency triggers with incident IDs, passenger names, assigned driver and vehicle number plate, pickup station, destination, and one-click security dispatch action.
+- **Network Operations KPI Dashboard:** Live telemetry for total passenger bookings, platform revenue, 75% driver payouts, KMRL revenue share, and EV fleet utilization.
+- **1-Click Passenger Queue Wiper:** Quick administrative tool (`Wipe Passenger Queue`) allowing instant clearing of uncompleted prototype demo passengers from SQLite.
+
+### 4. Backend Engine & Routing Intelligence
 - **Corridor Smart Grouping:** Groups passengers heading along identical urban transit corridors.
 - **Hard Constraint Enforcement:**
   - `MAX_WAIT_TIME = 10 min`: Groups exceeding 10 min wait are split into smaller approved clusters.
   - `MAX_DETOUR = 15 min`: Detour deviations strictly enforced before cluster creation.
   - `ZONE_CAPACITY = 2`: Dynamically balances station pickup bays across Zones A, B, C, and D.
-- **Demand-Responsive Feeder Bus Allocation:** Automatically consolidates corridor demand into a 20-passenger Feeder Bus when unassigned riders reach $\ge 10$.
 - **Non-Destructive Clustering:** In-flight driver cluster claims are preserved when new passenger bookings arrive.
+- **Auto-Purge Stale Bookings:** Automatically expires unassigned prototype bookings older than 5 minutes.
 
-### 4. Security & Access Control (RBAC)
+### 5. Security & Access Control (RBAC)
 - **Token Security:** Stateless HMAC-SHA256 bearer tokens.
 - **IDOR Protection:** Passengers can access only their own bookings; cross-account access is rejected (`403 Forbidden`).
 - **OTP Privacy:** Universal backdoor (`4721`) removed; passenger secret OTPs are masked from cluster feeds.
@@ -128,6 +134,7 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 | `GET` | `/api/bookings/:id` | Owner / Admin | Secure booking status and driver details (IDOR protected). |
 | `POST` | `/api/bookings/:id/cancel`| Owner / Admin | Cancels booking and recalculates cluster fare. |
 | `GET` | `/api/clusters` | Driver / Admin | Returns filtered clusters matching driver vehicle capacity. |
+| `POST` | `/api/clusters/clear-stale` | Driver / Admin | Purges unassigned stale prototype clusters older than 5 minutes. |
 | `POST` | `/api/clusters/:id/accept` | Driver | Atomically claims open cluster for the authenticated driver. |
 | `POST` | `/api/clusters/:id/arriving`| Driver | Signals vehicle is en route to pickup bay. |
 | `POST` | `/api/clusters/:id/arrived` | Driver | Signals vehicle has arrived at pickup bay. |
@@ -136,6 +143,17 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 | `POST` | `/api/clusters/:id/cancel-driver` | Driver / Admin | Cancels driver assignment and resets cluster to open search. |
 | `POST` | `/api/sos` | Passenger | Dispatches emergency SOS alert with GPS telemetry. |
 | `GET` | `/api/admin/metrics` | Admin | Returns operational analytics and commercial revenue splits. |
+| `GET` | `/api/admin/sos-alerts` | Admin | Returns active and historic emergency SOS incidents. |
+| `POST` | `/api/admin/clear-all` | Admin | Administrative purge of all uncompleted passenger queues and clusters. |
+
+---
+
+## Prototype Queue Cleanup CLI
+
+To wipe all active passenger queues and reset drivers on the server:
+```bash
+sudo python3 /opt/kmrl-orbit/backend/clear_queue.py
+```
 
 ---
 
@@ -175,4 +193,5 @@ npm run dev
 
 - **Passenger Portal:** Any passenger name with demo password `123`.
 - **Driver Portal:** Driver name (e.g. `Rakesh Kumar`, `Anil Varma`) with demo password `123`.
-- **Admin Endpoints:** Admin token with password `123` or `kmrladmin123`.
+- **Admin Dashboard:** Access directly via `/admin` on either domain, or log in with username `Admin` and demo password `123`.
+
