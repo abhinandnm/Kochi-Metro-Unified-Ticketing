@@ -368,7 +368,48 @@ export default function App() {
 
   if (!signedIn) {
     return (
-      <>
+      <div className="login-page-container">
+        {/* Animated Metro Background */}
+        <div className="metro-bg-scene">
+          <div className="sky-elements">
+            <div className="metro-stars" />
+          </div>
+          <div className="metro-viaduct-track">
+            <div className="track-rail" />
+            <div className="viaduct-pillars">
+              <span /><span /><span /><span /><span /><span /><span /><span />
+            </div>
+            <div className="metro-train">
+              <div className="train-car train-front">
+                <div className="train-cab-window" />
+                <div className="train-door" />
+                <div className="train-window" />
+                <div className="train-headlight" />
+                <div className="train-stripe" />
+              </div>
+              <div className="train-car train-middle">
+                <div className="train-window" />
+                <div className="train-door" />
+                <div className="train-window" />
+                <div className="train-stripe" />
+              </div>
+              <div className="train-car train-middle">
+                <div className="train-window" />
+                <div className="train-door" />
+                <div className="train-window" />
+                <div className="train-stripe" />
+              </div>
+              <div className="train-car train-rear">
+                <div className="train-window" />
+                <div className="train-door" />
+                <div className="train-cab-window" />
+                <div className="train-taillight" />
+                <div className="train-stripe" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {showDisclaimer && (
           <div
             className="disclaimer-banner"
@@ -402,11 +443,11 @@ export default function App() {
             The prototype is intended solely to demonstrate the proposed workflow and user experience.
           </div>
         )}
-        <main className="app-shell matching">
+        <main className="app-shell matching login-card-shell">
           <div className="matching-orb"><TrainFront size={28} /></div>
           <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
-          <h1>Unified Mobility</h1>
-          <p>Sign in to book your metro ticket and shared last-mile ride.</p>
+          <h1>Kochi Metro</h1>
+          <p>Sign in to book your metro ticket.</p>
           <input
             className="login-input"
             value={userName}
@@ -428,7 +469,7 @@ export default function App() {
           </button>
           {loginError && <small className="login-error">{loginError}</small>}
         </main>
-      </>
+      </div>
     )
   }
 
