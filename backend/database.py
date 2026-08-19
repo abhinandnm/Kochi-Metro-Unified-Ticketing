@@ -28,5 +28,6 @@ def initialize():
         if 'vehicle_capacity' not in cluster_columns:
             db.execute('ALTER TABLE clusters ADD COLUMN vehicle_capacity INTEGER NOT NULL DEFAULT 5')
         if not db.execute('SELECT 1 FROM drivers LIMIT 1').fetchone():
-            db.executemany('INSERT INTO drivers(name,vehicle,online,wallet,latitude,longitude) VALUES(?,?,?,?,?,?)', [('Rakesh Kumar','KL 07 CD 4531',1,0,10.109,76.352),('Maya S','KL 42 A 989',1,0,10.029,76.312)])
+            db.executemany('INSERT INTO drivers(name,vehicle,online,wallet,latitude,longitude) VALUES(?,?,?,?,?,?)', [('Rakesh Kumar','KL 07 CD 4531',0,0,10.109,76.352),('Maya S','KL 42 A 989',0,0,10.029,76.312)])
+        db.execute('UPDATE drivers SET online=0')
         db.execute('DELETE FROM clusters WHERE origin=? AND destination=? AND passenger_count=? AND NOT EXISTS (SELECT 1 FROM bookings WHERE bookings.cluster_id = clusters.id)', ('Aluva', 'Kakkanad', 3))
