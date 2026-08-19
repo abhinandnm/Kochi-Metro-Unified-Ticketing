@@ -21,6 +21,7 @@ export default function App() {
   const [earnings, setEarnings] = useState(0)
   const [tripHistory, setTripHistory] = useState<TripRecord[]>([])
   const [apiError, setApiError] = useState('')
+  const [showDisclaimer, setShowDisclaimer] = useState(true)
 
   const initials = username.trim().split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase() || 'D'
   const activeCluster = useMemo(() => clusters.find((cluster) => cluster.status === 'accepted' && cluster.driver_name?.toLowerCase() === username.trim().toLowerCase()) || clusters.find((cluster) => cluster.status === 'open'), [clusters, username])
