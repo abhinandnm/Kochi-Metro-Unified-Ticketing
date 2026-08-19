@@ -425,91 +425,7 @@ export default function App() {
 
   const [showDisclaimer, setShowDisclaimer] = useState(true)
 
-  if (!signedIn) {
-    return (
-      <div className="login-video-wrapper">
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="login-bg-video"
-          onTimeUpdate={(e) => {
-            if (e.currentTarget.currentTime >= 7) {
-              e.currentTarget.currentTime = 0
-            }
-          }}
-        >
-          <source src="/metro-bg.mp4" type="video/mp4" />
-        </video>
-        <div className="login-video-overlay" />
-
-        {showDisclaimer && (
-          <div
-            className="disclaimer-banner"
-            style={{
-              background: 'rgba(255, 250, 230, 0.95)',
-              color: '#856404',
-              padding: '16px',
-              fontSize: '12px',
-              borderBottom: '1px solid #ffeeba',
-              position: 'relative',
-              zIndex: 1000,
-              backdropFilter: 'blur(4px)',
-              width: '100%'
-            }}
-          >
-            <button
-              onClick={() => setShowDisclaimer(false)}
-              style={{
-                position: 'absolute',
-                right: '8px',
-                top: '8px',
-                background: 'none',
-                border: 'none',
-                fontSize: '16px',
-                cursor: 'pointer',
-                color: '#856404'
-              }}
-            >
-              ×
-            </button>
-            <strong>Prototype Disclaimer:</strong> The passenger and driver portals are proof-of-concept demonstrations and are not production systems. The station information, routes, fares, distances, passenger counts, and other operational data shown in the prototype are representative/demo data and are not intended to reflect actual KMRL fares, routes, schedules, or operational information.<br/><br/>
-            The authentication in the prototype is also simplified for demonstration purposes; any username can be used with the demo password <strong>123</strong>. No real passenger, driver, payment, or KMRL data is used.<br/><br/>
-            The prototype is intended solely to demonstrate the proposed workflow and user experience.
-          </div>
-        )}
-        <main className="app-shell matching login-glass-card">
-          <div className="matching-orb"><TrainFront size={28} /></div>
-          <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
-          <h1>Kochi Metro</h1>
-          <p>Sign in to book your metro ticket.</p>
-          <input
-            className="login-input"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="Passenger Name"
-          />
-          <input
-            className="login-input"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password (use 123)"
-          />
-          <button
-            className="primary-button"
-            onClick={() => void handleLogin()}
-          >
-            Continue <span>→</span>
-          </button>
-          {loginError && <small className="login-error">{loginError}</small>}
-        </main>
-      </div>
-    )
-  }
-
+  // Direct Route Handling for /admin
   if (isAdminView) {
     const summary = adminMetrics?.today_summary || {}
     const util = adminMetrics?.utilization || {}
@@ -532,7 +448,13 @@ export default function App() {
             <button className="admin-action-btn danger" onClick={() => void handleAdminClearAll()}>
               <Trash2 size={15} /> Wipe Passenger Queue
             </button>
-            <button className="admin-action-btn" onClick={() => setIsAdminView(false)}>
+            <button
+              className="admin-action-btn"
+              onClick={() => {
+                window.history.pushState({}, '', '/')
+                setIsAdminView(false)
+              }}
+            >
               Passenger View →
             </button>
           </div>
@@ -619,6 +541,102 @@ export default function App() {
           </div>
         </section>
       </main>
+    )
+  }
+
+  if (!signedIn) {
+    return (
+      <div className="login-video-wrapper">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="login-bg-video"
+          onTimeUpdate={(e) => {
+            if (e.currentTarget.currentTime >= 7) {
+              e.currentTarget.currentTime = 0
+            }
+          }}
+        >
+          <source src="/metro-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="login-video-overlay" />
+
+        {showDisclaimer && (
+          <div
+            className="disclaimer-banner"
+            style={{
+              background: 'rgba(255, 250, 230, 0.95)',
+              color: '#856404',
+              padding: '16px',
+              fontSize: '12px',
+              borderBottom: '1px solid #ffeeba',
+              position: 'relative',
+              zIndex: 1000,
+              backdropFilter: 'blur(4px)',
+              width: '100%'
+            }}
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              style={{
+                position: 'absolute',
+                right: '8px',
+                top: '8px',
+                background: 'none',
+                border: 'none',
+                fontSize: '16px',
+                cursor: 'pointer',
+                color: '#856404'
+              }}
+            >
+              ×
+            </button>
+            <strong>Prototype Disclaimer:</strong> The passenger and driver portals are proof-of-concept demonstrations and are not production systems. The station information, routes, fares, distances, passenger counts, and other operational data shown in the prototype are representative/demo data and are not intended to reflect actual KMRL fares, routes, schedules, or operational information.<br/><br/>
+            The authentication in the prototype is also simplified for demonstration purposes; any username can be used with the demo password <strong>123</strong>. No real passenger, driver, payment, or KMRL data is used.<br/><br/>
+            The prototype is intended solely to demonstrate the proposed workflow and user experience.
+          </div>
+        )}
+        <main className="app-shell matching login-glass-card">
+          <div className="matching-orb"><TrainFront size={28} /></div>
+          <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
+          <h1>Kochi Metro</h1>
+          <p>Sign in to book your metro ticket.</p>
+          <input
+            className="login-input"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="Passenger Name"
+          />
+          <input
+            className="login-input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password (use 123)"
+          />
+          <button
+            className="primary-button"
+            onClick={() => void handleLogin()}
+          >
+            Continue <span>→</span>
+          </button>
+          {loginError && <small className="login-error">{loginError}</small>}
+          <div style={{ marginTop: '16px', textAlign: 'center' }}>
+            <button
+              onClick={() => {
+                window.history.pushState({}, '', '/admin')
+                setIsAdminView(true)
+              }}
+              style={{ background: 'none', border: 'none', color: '#0f766e', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              ⚙ Open KMRL OCC Admin Monitor (/admin)
+            </button>
+          </div>
+        </main>
+      </div>
     )
   }
 
