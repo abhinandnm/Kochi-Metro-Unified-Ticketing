@@ -73,7 +73,30 @@ export default function App() {
     }
   }
 
-  if (!signedIn) return <main className="driver-shell driver-login"><div className="login-logo"><TrainFront size={27} /></div><small>KOCHI METRO DRIVER PORTAL</small><h1>Move the city forward.</h1><p>Sign in to receive nearby passenger clusters.</p><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="Username" /><input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" /><button className="primary" onClick={() => { if (username.trim() && password === '123') { setSignedIn(true); setLoginError('') } else setLoginError('Invalid username or password.') }}>Continue <ChevronRight size={20} /></button>{loginError && <small className="driver-error">{loginError}</small>}</main>
+  const [showDisclaimer, setShowDisclaimer] = useState(true)
+
+  if (!signedIn) return (
+    <>
+      {showDisclaimer && (
+        <div className="disclaimer-banner" style={{ background: '#fffae6', color: '#856404', padding: '16px', fontSize: '12px', borderBottom: '1px solid #ffeeba', position: 'relative', zIndex: 1000 }}>
+          <button onClick={() => setShowDisclaimer(false)} style={{ position: 'absolute', right: '8px', top: '8px', background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#856404' }}>×</button>
+          <strong>Prototype Disclaimer:</strong> The passenger and driver portals are proof-of-concept demonstrations and are not production systems. The station information, routes, fares, distances, passenger counts, and other operational data shown in the prototype are representative/demo data and are not intended to reflect actual KMRL fares, routes, schedules, or operational information.<br/><br/>
+          The authentication in the prototype is also simplified for demonstration purposes; any username can be used with the demo password <strong>123</strong>. No real passenger, driver, payment, or KMRL data is used.<br/><br/>
+          The prototype is intended solely to demonstrate the proposed workflow and user experience.
+        </div>
+      )}
+      <main className="driver-shell driver-login">
+        <div className="login-logo"><TrainFront size={27} /></div>
+        <small>KOCHI METRO DRIVER PORTAL</small>
+        <h1>Move the city forward.</h1>
+        <p>Sign in to receive nearby passenger clusters.</p>
+        <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="Username" />
+        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" />
+        <button className="primary" onClick={() => { if (username.trim() && password === '123') { setSignedIn(true); setLoginError('') } else setLoginError('Invalid username or password.') }}>Continue <ChevronRight size={20} /></button>
+        {loginError && <small className="driver-error">{loginError}</small>}
+      </main>
+    </>
+  )
 
   const tripsView = trip === 'complete'
     ? <section className="completed"><CheckCircle2 size={42} /><h2>Trip completed</h2><p>Your earnings have been added to the wallet.</p><button className="primary" onClick={() => setTrip('available')}>Find next cluster <ChevronRight size={20} /></button></section>
