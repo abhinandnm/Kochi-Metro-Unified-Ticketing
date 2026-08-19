@@ -402,30 +402,7 @@ export default function App() {
             The prototype is intended solely to demonstrate the proposed workflow and user experience.
           </div>
         )}
-        <main className="app-shell matching" style={{ position: 'relative', overflow: 'hidden' }}>
-          {/* Animated Metro Train Track on Login Screen */}
-          <div className="metro-track-container">
-            <div className="metro-track-line" />
-            <div className="metro-train-moving">
-              <div className="metro-car front">
-                <span className="car-window cab" />
-                <span className="car-window" />
-                <span className="car-stripe" />
-                <span className="car-light" />
-              </div>
-              <div className="metro-car middle">
-                <span className="car-window" />
-                <span className="car-window" />
-                <span className="car-stripe" />
-              </div>
-              <div className="metro-car rear">
-                <span className="car-window" />
-                <span className="car-window cab" />
-                <span className="car-stripe" />
-              </div>
-            </div>
-          </div>
-
+        <main className="app-shell matching">
           <div className="matching-orb"><TrainFront size={28} /></div>
           <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
           <h1>Kochi Metro</h1>
