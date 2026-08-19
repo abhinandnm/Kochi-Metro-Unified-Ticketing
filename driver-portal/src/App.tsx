@@ -282,7 +282,7 @@ export default function App() {
           <div className="login-logo"><TrainFront size={27} /></div>
           <small>KOCHI METRO DRIVER PARTNER PORTAL</small>
           <h1>Drive with Kochi Metro.</h1>
-          <p>Sign in to receive capacity-matched passenger clusters.</p>
+          <p>Sign in to view and accept passenger ride clusters.</p>
           <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Driver Name / Username" />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (use 123)" />
           <button className="primary" onClick={() => void handleSignIn()}>Continue <ChevronRight size={20} /></button>

@@ -405,7 +405,7 @@ export default function App() {
           <div className="matching-orb"><TrainFront size={28} /></div>
           <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
           <h1>Unified Mobility</h1>
-          <p>Sign in to begin your capacity-aware last-mile journey.</p>
+          <p>Sign in to book your metro ticket and shared last-mile ride.</p>
           <input
             className="login-input"
             value={userName}
