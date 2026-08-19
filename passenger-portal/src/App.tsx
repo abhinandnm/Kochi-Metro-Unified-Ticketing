@@ -368,18 +368,32 @@ export default function App() {
 
   if (!signedIn) {
     return (
-      <>
+      <div className="login-video-wrapper">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="login-bg-video"
+        >
+          <source src="/metro-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="login-video-overlay" />
+
         {showDisclaimer && (
           <div
             className="disclaimer-banner"
             style={{
-              background: '#fffae6',
+              background: 'rgba(255, 250, 230, 0.95)',
               color: '#856404',
               padding: '16px',
               fontSize: '12px',
               borderBottom: '1px solid #ffeeba',
               position: 'relative',
-              zIndex: 1000
+              zIndex: 1000,
+              backdropFilter: 'blur(4px)',
+              width: '100%'
             }}
           >
             <button
@@ -402,7 +416,7 @@ export default function App() {
             The prototype is intended solely to demonstrate the proposed workflow and user experience.
           </div>
         )}
-        <main className="app-shell matching">
+        <main className="app-shell matching login-glass-card">
           <div className="matching-orb"><TrainFront size={28} /></div>
           <p className="overline dark">KOCHI METRO RAIL LIMITED</p>
           <h1>Kochi Metro</h1>
@@ -428,7 +442,7 @@ export default function App() {
           </button>
           {loginError && <small className="login-error">{loginError}</small>}
         </main>
-      </>
+      </div>
     )
   }
 
