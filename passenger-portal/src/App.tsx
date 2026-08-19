@@ -22,8 +22,6 @@ import {
   AlertOctagon,
   LifeBuoy,
   RefreshCw,
-  BarChart3,
-  Sliders,
   ChevronDown,
   ChevronUp,
   Car
@@ -34,15 +32,18 @@ type AssignedDriver = {
   initials: string
   name: string
   vehicle: string
-  vehicle_type: string
-  verified: boolean
-  mode: 'cab' | 'feeder'
-  assigned: boolean
+  vehicle_type?: string
+  verified?: boolean
+  mode: 'feeder' | 'cab'
+  assigned?: boolean
 }
 type BookingStatus = {
-  clusterStatus: string
-  clusterPassengerCount: number
-  assignedZone: string
+  id?: number
+  status?: string
+  pickupZone?: string
+  assignedZone?: string
+  clusterStatus?: string
+  clusterPassengerCount?: number
   driverName?: string
   driverVehicle?: string
   driverVehicleType?: string
@@ -56,8 +57,10 @@ type FareQuote = {
   fare: number
   metro_fare: number
   last_mile_fare: number
-  distance_km?: number
-  online_drivers?: number
+  distance_km: number
+  estimated_minutes: number
+  handoff_station: string
+  corridor: string
   available_capacity?: number
   drivers_available?: boolean
   breakdown?: {
@@ -125,16 +128,10 @@ export default function App() {
   const [fallbackOptions, setFallbackOptions] = useState<string[]>([])
   const [quotes, setQuotes] = useState<{ standard?: FareQuote; orbit?: FareQuote }>({})
   const [showFareBreakdown, setShowFareBreakdown] = useState(false)
-  const [showSimulator, setShowSimulator] = useState(false)
 
   // Safety actions modal
   const [shareModalOpen, setShareModalOpen] = useState(false)
   const [sosTriggered, setSosTriggered] = useState(false)
-
-  // Simulator controls
-  const [simDailyPassengers, setSimDailyPassengers] = useState(1000)
-  const [simAvgFare, setSimAvgFare] = useState(80)
-  const [simKmrlComm, setSimKmrlComm] = useState(10)
 
   const fares = useMemo(() => {
     const quote = quotes[journeyKind]
@@ -500,24 +497,7 @@ export default function App() {
       {/* Header & Brand */}
       <section className="hero-panel">
         <div className="topbar">
-          <button
-            onClick={() => setShowSimulator(!showSimulator)}
-            style={{
-              background: '#0284c7',
-              color: '#fff',
-              border: 'none',
-              padding: '6px 12px',
-              borderRadius: '20px',
-              fontSize: '11px',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              cursor: 'pointer'
-            }}
-          >
-            <BarChart3 size={14} /> KMRL Simulator
-          </button>
+          <span />
           <div className="brand">
             <span className="brand-mark">K</span>
             <span>KOCHI METRO</span>
@@ -676,7 +656,7 @@ export default function App() {
           onClick={() => void submitBooking()}
           disabled={!from || !to || (journeyKind === 'orbit' && isUnifiedUnavailable)}
         >
-          {journeyKind === 'orbit' ? 'Book Unified Coordination' : 'Continue with Metro'} <span>→</span>
+          {journeyKind === 'orbit' ? 'Book Unified Ticket' : 'Continue with Metro'} <span>→</span>
         </button>
 
         {bookingError && (
@@ -695,92 +675,10 @@ export default function App() {
           </div>
         )}
 
-        <div className="bottom-note" style={{ textAlign: 'center', marginTop: '12px', fontSize: '11px', color: '#64748b' }}>
-          <WalletCards size={14} style={{ display: 'inline', verticalAlign: '-2px' }} /> Service provided as last-mile coordination · Non-guaranteed doorstep transport
+        <div className="bottom-note">
+          <WalletCards size={16} /> Single payment for metro ticket and shared last-mile ride
         </div>
       </section>
-
-      {/* KMRL Leadership Simulator Modal */}
-      {showSimulator && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ background: '#fff', borderRadius: '16px', maxWidth: '440px', width: '100%', padding: '20px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <BarChart3 size={20} color="#0284c7" />
-                <h3 style={{ margin: 0, fontSize: '17px' }}>KMRL Economics Simulator</h3>
-              </div>
-              <button onClick={() => setShowSimulator(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>×</button>
-            </div>
-
-            <div style={{ background: '#f0f9ff', padding: '12px', borderRadius: '10px', fontSize: '12px', marginBottom: '14px' }}>
-              <strong>Today's Live Unified Operational Summary:</strong>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '8px' }}>
-                <div>Trips: <strong>126</strong></div>
-                <div>Passengers: <strong>438</strong></div>
-                <div>Avg Occupancy: <strong>3.4/4 (85%)</strong></div>
-                <div>Gross Rev: <strong>₹43,800</strong></div>
-              </div>
-            </div>
-
-            <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '12px' }}>
-              <strong style={{ display: 'block', marginBottom: '8px' }}>Interactive Scenario Modeling</strong>
-              <label style={{ display: 'block', marginBottom: '10px' }}>
-                Daily Unified Passengers: <strong>{simDailyPassengers}</strong>
-                <input
-                  type="range"
-                  min={100}
-                  max={5000}
-                  step={100}
-                  value={simDailyPassengers}
-                  onChange={(e) => setSimDailyPassengers(Number(e.target.value))}
-                  style={{ width: '100%', marginTop: '4px' }}
-                />
-              </label>
-
-              <label style={{ display: 'block', marginBottom: '10px' }}>
-                Average Last-Mile Fare: <strong>₹{simAvgFare}</strong>
-                <input
-                  type="range"
-                  min={40}
-                  max={150}
-                  step={5}
-                  value={simAvgFare}
-                  onChange={(e) => setSimAvgFare(Number(e.target.value))}
-                  style={{ width: '100%', marginTop: '4px' }}
-                />
-              </label>
-
-              <label style={{ display: 'block', marginBottom: '12px' }}>
-                Partner Commission Share: <strong>{simKmrlComm}%</strong>
-                <input
-                  type="range"
-                  min={5}
-                  max={25}
-                  step={1}
-                  value={simKmrlComm}
-                  onChange={(e) => setSimKmrlComm(Number(e.target.value))}
-                  style={{ width: '100%', marginTop: '4px' }}
-                />
-              </label>
-
-              <div style={{ background: '#ffffff', padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>Estimated Daily Gross:</span>
-                  <strong>₹{(simDailyPassengers * simAvgFare).toLocaleString()}</strong>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0284c7', fontWeight: 'bold', marginTop: '4px' }}>
-                  <span>Estimated KMRL Component:</span>
-                  <span>₹{Math.round(simDailyPassengers * simAvgFare * (simKmrlComm / 100)).toLocaleString()}</span>
-                </div>
-              </div>
-            </div>
-
-            <button className="primary-button" style={{ marginTop: '14px', width: '100%' }} onClick={() => setShowSimulator(false)}>
-              Close Simulator
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Share Trip Modal (Point 5) */}
       {shareModalOpen && (
