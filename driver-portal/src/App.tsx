@@ -176,6 +176,26 @@ export default function App() {
     )
   }, [clusters, username])
 
+  const mapData = useMemo(() => {
+    const origStation = activeCluster?.origin?.replace(/ Metro( Station)?/i, '').trim() || 'Vyttila'
+    const destName = activeCluster?.destination || 'Infopark, Kakkanad'
+    const origCoord = STATION_COORDS[origStation] || [9.9658, 76.3195]
+    const destCoord = DESTINATION_COORDS[destName] || [10.0108, 76.3638]
+    
+    const minLat = Math.min(origCoord[0], destCoord[0]) - 0.015
+    const maxLat = Math.max(origCoord[0], destCoord[0]) + 0.015
+    const minLon = Math.min(origCoord[1], destCoord[1]) - 0.02
+    const maxLon = Math.max(origCoord[1], destCoord[1]) + 0.02
+
+    return {
+      origStation,
+      destName,
+      origCoord,
+      destCoord,
+      embedUrl: `https://www.openstreetmap.org/export/embed.html?bbox=${minLon.toFixed(4)},${minLat.toFixed(4)},${maxLon.toFixed(4)},${maxLat.toFixed(4)}&layer=mapnik&marker=${destCoord[0].toFixed(4)},${destCoord[1].toFixed(4)}`
+    }
+  }, [activeCluster])
+
   const loadClusters = async () => {
     try {
       const headers: HeadersInit = authToken ? { Authorization: `Bearer ${authToken}` } : {}
@@ -591,26 +611,6 @@ export default function App() {
       </div>
     </>
   )
-
-  const mapData = useMemo(() => {
-    const origStation = activeCluster?.origin?.replace(/ Metro( Station)?/i, '').trim() || 'Vyttila'
-    const destName = activeCluster?.destination || 'Infopark, Kakkanad'
-    const origCoord = STATION_COORDS[origStation] || [9.9658, 76.3195]
-    const destCoord = DESTINATION_COORDS[destName] || [10.0108, 76.3638]
-    
-    const minLat = Math.min(origCoord[0], destCoord[0]) - 0.015
-    const maxLat = Math.max(origCoord[0], destCoord[0]) + 0.015
-    const minLon = Math.min(origCoord[1], destCoord[1]) - 0.02
-    const maxLon = Math.max(origCoord[1], destCoord[1]) + 0.02
-
-    return {
-      origStation,
-      destName,
-      origCoord,
-      destCoord,
-      embedUrl: `https://www.openstreetmap.org/export/embed.html?bbox=${minLon.toFixed(4)},${minLat.toFixed(4)},${maxLon.toFixed(4)},${maxLat.toFixed(4)}&layer=mapnik&marker=${destCoord[0].toFixed(4)},${destCoord[1].toFixed(4)}`
-    }
-  }, [activeCluster])
 
   return (
     <main className="driver-shell">
