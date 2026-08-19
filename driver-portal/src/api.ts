@@ -1,3 +1,0 @@
-const API = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
-export async function setAvailability(online: boolean) { return fetch(`${API}/drivers/1/availability`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ online }) }) }
-export async function acceptCluster(id: number) { const response = await fetch(`${API}/clusters/${id}/accept`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ driver_id: 1 }) }); if (!response.ok) throw new Error('Cluster is no longer available'); return response.json() }

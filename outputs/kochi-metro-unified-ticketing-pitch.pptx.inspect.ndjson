@@ -1,0 +1,123 @@
+{"kind":"deck","id":"pr/tdx789","name":"Deck"}
+{"kind":"layout","layoutId":"de53b022-4bad-4e1d-a9b3-30c68496be65","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"4e8ed016-ce7a-45e7-a843-2dc552c4deb2","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y5cjjc","slide":1,"title":"KMRL HACKATHON","textShapes":6}
+{"kind":"shape","id":"sh/2p03ehcn","slide":1,"bbox":[48,48,10,584]}
+{"kind":"shape","id":"sh/psrmpcve","slide":1,"bbox":[84,64,164,28]}
+{"kind":"textbox","id":"sh/orilg7ut","slide":1,"text":"KMRL HACKATHON","textPreview":"KMRL HACKATHON","textChars":14,"textLines":1,"bbox":[96,71,140,14]}
+{"kind":"textbox","id":"sh/be94rmdk","slide":1,"text":"Kochi Metro\nUnified Ticketing","textPreview":"Kochi Metro | Unified Ticketing","textChars":29,"textLines":2,"bbox":[84,158,920,180]}
+{"kind":"textbox","id":"sh/ad03ihcz","slide":1,"text":"One metro ticket. One guided last-mile journey.","textPreview":"One metro ticket. One guided last-mile journey.","textChars":47,"textLines":1,"bbox":[88,374,720,42]}
+{"kind":"textbox","id":"sh/xgrmtwva","slide":1,"text":"A smart platform that connects passenger bookings, destination-aware clusters, and last-mile drivers through one live system.","textPreview":"A smart platform that connects passenger bookings, destination-aware clusters, and last-mile drivers through one live system.","textChars":125,"textLines":1,"bbox":[88,442,730,68]}
+{"kind":"shape","id":"sh/wfilkrup","slide":1,"bbox":[920,144,230,230]}
+{"kind":"textbox","id":"sh/ripkf2d0","slide":1,"text":"METRO\n+\nLAST MILE","textPreview":"METRO | + | LAST MILE","textChars":17,"textLines":3,"bbox":[956,206,160,110]}
+{"kind":"textbox","id":"sh/qxw36xcf","slide":1,"text":"Passenger Portal  •  Driver Portal  •  Flask API","textPreview":"Passenger Portal  •  Driver Portal  •  Flask API","textChars":48,"textLines":1,"bbox":[88,620,700,18]}
+{"kind":"notes","id":"nt/y5cjjc","slide":1,"text":""}
+{"kind":"slide","id":"sl/v55cdl","slide":2,"title":"PROBLEM IDENTIFIED","textShapes":13}
+{"kind":"shape","id":"sh/547i5wve","slide":2,"bbox":[48,42,164,28]}
+{"kind":"textbox","id":"sh/yhgja1wn","slide":2,"text":"PROBLEM IDENTIFIED","textPreview":"PROBLEM IDENTIFIED","textChars":18,"textLines":1,"bbox":[60,49,140,14]}
+{"kind":"textbox","id":"sh/j2p036d8","slide":2,"text":"The metro journey breaks at the last mile.","textPreview":"The metro journey breaks at the last mile.","textChars":42,"textLines":1,"bbox":[48,94,1120,72]}
+{"kind":"textbox","id":"sh/wfy18reh","slide":2,"text":"KMRL UNIFIED TICKETING  /  02","textPreview":"KMRL UNIFIED TICKETING  /  02","textChars":29,"textLines":1,"bbox":[48,678,360,16]}
+{"kind":"textbox","id":"sh/xg7i1wv2","slide":2,"text":"Passengers leave the station without a clear, affordable, or coordinated way to reach their actual destination.","textPreview":"Passengers leave the station without a clear, affordable, or coordinated way to reach their actual destination.","textChars":111,"textLines":1,"bbox":[48,184,880,52]}
+{"kind":"shape","id":"sh/adwj6hwr","slide":2,"bbox":[48,288,1184,0]}
+{"kind":"textbox","id":"sh/bep0zmdc","slide":2,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[52,330,64,40]}
+{"kind":"textbox","id":"sh/obe14rel","slide":2,"text":"Fragmented experience","textPreview":"Fragmented experience","textChars":21,"textLines":1,"bbox":[52,378,300,34]}
+{"kind":"textbox","id":"sh/9cnixcv6","slide":2,"text":"Metro, cab, payment, and pickup guidance are separate decisions.","textPreview":"Metro, cab, payment, and pickup guidance are separate decisions.","textChars":64,"textLines":1,"bbox":[52,422,300,84]}
+{"kind":"textbox","id":"sh/p07a5kza","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[454,330,64,40]}
+{"kind":"textbox","id":"sh/ozytcfip","slide":2,"text":"Low ride efficiency","textPreview":"Low ride efficiency","textChars":19,"textLines":1,"bbox":[454,378,300,34]}
+{"kind":"textbox","id":"sh/nyps3ah4","slide":2,"text":"Drivers receive individual trips instead of ready passenger groups.","textPreview":"Drivers receive individual trips instead of ready passenger groups.","textChars":67,"textLines":1,"bbox":[454,422,300,84]}
+{"kind":"textbox","id":"sh/2xgra50j","slide":2,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[856,330,64,40]}
+{"kind":"textbox","id":"sh/1wna10zy","slide":2,"text":"Limited visibility","textPreview":"Limited visibility","textChars":18,"textLines":1,"bbox":[856,378,300,34]}
+{"kind":"textbox","id":"sh/0be98vid","slide":2,"text":"KMRL cannot easily coordinate the last-mile handoff through one flow.","textPreview":"KMRL cannot easily coordinate the last-mile handoff through one flow.","textChars":69,"textLines":1,"bbox":[856,422,300,84]}
+{"kind":"notes","id":"nt/v55cdl","slide":2,"text":""}
+{"kind":"slide","id":"sl/h6l8sf","slide":3,"title":"SOLUTION","textShapes":16}
+{"kind":"shape","id":"sh/falgjehs","slide":3,"bbox":[48,42,164,28]}
+{"kind":"textbox","id":"sh/0buhsjyx","slide":3,"text":"SOLUTION","textPreview":"SOLUTION","textChars":8,"textLines":1,"bbox":[60,49,140,14]}
+{"kind":"textbox","id":"sh/1wnylozi","slide":3,"text":"Unified Booking turns a ticket into a complete journey.","textPreview":"Unified Booking turns a ticket into a complete journey.","textChars":55,"textLines":1,"bbox":[48,94,1120,72]}
+{"kind":"textbox","id":"sh/q5czm9gv","slide":3,"text":"KMRL UNIFIED TICKETING  /  03","textPreview":"KMRL UNIFIED TICKETING  /  03","textChars":29,"textLines":1,"bbox":[48,678,360,16]}
+{"kind":"textbox","id":"sh/r6lgfehg","slide":3,"text":"The passenger books for the real final destination. The platform coordinates the rest.","textPreview":"The passenger books for the real final destination. The platform coordinates the rest.","textChars":86,"textLines":1,"bbox":[48,178,950,36]}
+{"kind":"shape","id":"sh/s7uhojy1","slide":3,"bbox":[172,366,250,0]}
+{"kind":"shape","id":"sh/d83yhozm","slide":3,"bbox":[482,366,250,0]}
+{"kind":"shape","id":"sh/a1wzydgf","slide":3,"bbox":[792,366,250,0]}
+{"kind":"shape","id":"sh/b250rih0","slide":3,"bbox":[72,305,200,126]}
+{"kind":"shape","id":"sh/v2h4netk","slide":3,"bbox":[88,320,38,38]}
+{"kind":"textbox","id":"sh/u18nu9cz","slide":3,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[99,328,18,18]}
+{"kind":"textbox","id":"sh/hoz6pobq","slide":3,"text":"Book","textPreview":"Book","textChars":4,"textLines":1,"bbox":[90,371,160,24]}
+{"kind":"textbox","id":"sh/w3q5wju5","slide":3,"text":"Metro station + final destination","textPreview":"Metro station + final destination","textChars":33,"textLines":1,"bbox":[90,401,166,36]}
+{"kind":"shape","id":"sh/jqhoretw","slide":3,"bbox":[382,305,200,126]}
+{"kind":"shape","id":"sh/ip8ny9cb","slide":3,"bbox":[398,320,38,38]}
+{"kind":"textbox","id":"sh/5sz6tob2","slide":3,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[409,328,18,18]}
+{"kind":"textbox","id":"sh/4rq50juh","slide":3,"text":"Map","textPreview":"Map","textChars":3,"textLines":1,"bbox":[400,371,160,24]}
+{"kind":"textbox","id":"sh/ru1ovyts","slide":3,"text":"Nearest handoff station + pickup zone","textPreview":"Nearest handoff station + pickup zone","textChars":37,"textLines":1,"bbox":[400,401,166,36]}
+{"kind":"shape","id":"sh/6tsn2tc7","slide":3,"bbox":[692,305,200,126]}
+{"kind":"shape","id":"sh/m1wzah0r","slide":3,"bbox":[708,320,38,38]}
+{"kind":"textbox","id":"sh/n25gjmhc","slide":3,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[719,328,18,18]}
+{"kind":"textbox","id":"sh/o3ehcrix","slide":3,"text":"Group","textPreview":"Group","textChars":5,"textLines":1,"bbox":[710,371,160,24]}
+{"kind":"textbox","id":"sh/94nilwzi","slide":3,"text":"Compatible passengers form a cluster","textPreview":"Compatible passengers form a cluster","textChars":36,"textLines":1,"bbox":[710,401,166,36]}
+{"kind":"shape","id":"sh/excz6h0v","slide":3,"bbox":[1002,305,200,126]}
+{"kind":"shape","id":"sh/zy5gfmhg","slide":3,"bbox":[1018,320,38,38]}
+{"kind":"textbox","id":"sh/0zeh8ril","slide":3,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[1029,328,18,18]}
+{"kind":"textbox","id":"sh/10nyhwz6","slide":3,"text":"Ride","textPreview":"Ride","textChars":4,"textLines":1,"bbox":[1020,371,160,24]}
+{"kind":"textbox","id":"sh/ytgzi10z","slide":3,"text":"Driver assignment and trip completion","textPreview":"Driver assignment and trip completion","textChars":37,"textLines":1,"bbox":[1020,401,166,36]}
+{"kind":"notes","id":"nt/h6l8sf","slide":3,"text":""}
+{"kind":"slide","id":"sl/1i599m","slide":4,"title":"LIVE WORKFLOW","textShapes":7}
+{"kind":"shape","id":"sh/szq1oba9","slide":4,"bbox":[48,42,164,28]}
+{"kind":"textbox","id":"sh/ryh0vqt4","slide":4,"text":"LIVE WORKFLOW","textPreview":"LIVE WORKFLOW","textChars":13,"textLines":1,"bbox":[60,49,140,14]}
+{"kind":"textbox","id":"sh/6x8jmlsj","slide":4,"text":"A live booking becomes a live driver cluster.","textPreview":"A live booking becomes a live driver cluster.","textChars":45,"textLines":1,"bbox":[48,94,1120,72]}
+{"kind":"textbox","id":"sh/5wzitgby","slide":4,"text":"KMRL UNIFIED TICKETING  /  04","textPreview":"KMRL UNIFIED TICKETING  /  04","textChars":29,"textLines":1,"bbox":[48,678,360,16]}
+{"kind":"textbox","id":"sh/4vqhkbad","slide":4,"text":"The two portals are separate React applications, but both see the same booking state through the Flask API.","textPreview":"The two portals are separate React applications, but both see the same booking state through the Flask API.","textChars":107,"textLines":1,"bbox":[48,176,590,72]}
+{"kind":"shape","id":"sh/juh0r6ts","slide":4,"bbox":[48,282,515,246]}
+{"kind":"textbox","id":"sh/itozi1s7","slide":4,"text":"What the passenger sees","textPreview":"What the passenger sees","textChars":23,"textLines":1,"bbox":[78,316,330,28]}
+{"kind":"textbox","id":"sh/ps3i50b2","slide":4,"text":"• Cluster created\n• Assigned pickup zone\n• Driver accepted your trip\n• Trip completed","textPreview":"• Cluster created | • Assigned pickup zone | • Driver accepted your trip | • Trip completed","textChars":85,"textLines":4,"bbox":[78,370,360,122]}
+{"kind":"textbox","id":"sh/2tgj6lsr","slide":4,"text":"Driver Portal — real-time cluster operations","textPreview":"Driver Portal — real-time cluster operations","textChars":44,"textLines":1,"bbox":[670,615,500,24]}
+{"kind":"image","id":"im/pc3elgra","slide":4,"name":"","geometry":"roundRect","alt":"Kochi Metro Driver Portal login screen","bbox":[670,160,500,440]}
+{"kind":"notes","id":"nt/1i599m","slide":4,"text":""}
+{"kind":"slide","id":"sl/0l3v6e","slide":5,"title":"ARCHITECTURE","textShapes":11}
+{"kind":"shape","id":"sh/m1ozydkb","slide":5,"bbox":[48,42,164,28]}
+{"kind":"textbox","id":"sh/9ozitsjm","slide":5,"text":"ARCHITECTURE","textPreview":"ARCHITECTURE","textChars":12,"textLines":1,"bbox":[60,49,140,14]}
+{"kind":"textbox","id":"sh/8n6h0n21","slide":5,"text":"Two React portals connect through one Flask REST API.","textPreview":"Two React portals connect through one Flask REST API.","textChars":53,"textLines":1,"bbox":[48,94,1120,72]}
+{"kind":"textbox","id":"sh/vqh0vi1s","slide":5,"text":"KMRL UNIFIED TICKETING  /  05","textPreview":"KMRL UNIFIED TICKETING  /  05","textChars":29,"textLines":1,"bbox":[48,678,360,16]}
+{"kind":"textbox","id":"sh/up8z2dk7","slide":5,"text":"Passenger and driver portals never communicate directly. The API owns booking, cluster, and trip status.","textPreview":"Passenger and driver portals never communicate directly. The API owns booking, cluster, and trip status.","textChars":104,"textLines":1,"bbox":[48,176,980,42]}
+{"kind":"shape","id":"sh/hszixsjy","slide":5,"bbox":[380,378,210,0]}
+{"kind":"shape","id":"sh/wrqh4n2d","slide":5,"bbox":[690,378,210,0]}
+{"kind":"shape","id":"sh/juh0z21o","slide":5,"bbox":[72,298,300,158]}
+{"kind":"shape","id":"sh/it8z6xkj","slide":5,"bbox":[490,278,300,198]}
+{"kind":"shape","id":"sh/s3q5sfid","slide":5,"bbox":[908,298,300,158]}
+{"kind":"textbox","id":"sh/t4zmlkzi","slide":5,"text":"Passenger Portal","textPreview":"Passenger Portal","textChars":16,"textLines":1,"bbox":[102,330,240,34]}
+{"kind":"textbox","id":"sh/618nqp07","slide":5,"text":"React + Vite\nBooking and journey status","textPreview":"React + Vite | Booking and journey status","textChars":39,"textLines":2,"bbox":[102,382,200,52]}
+{"kind":"textbox","id":"sh/72h4juhs","slide":5,"text":"Flask API","textPreview":"Flask API","textChars":9,"textLines":1,"bbox":[530,323,220,34]}
+{"kind":"textbox","id":"sh/grq5wzi9","slide":5,"text":"Bookings\nClusters\nDriver assignment\nTrip completion","textPreview":"Bookings | Clusters | Driver assignment | Trip completion","textChars":51,"textLines":4,"bbox":[530,375,220,80]}
+{"kind":"textbox","id":"sh/hsjmp4zu","slide":5,"text":"Driver Portal","textPreview":"Driver Portal","textChars":13,"textLines":1,"bbox":[938,330,240,34]}
+{"kind":"textbox","id":"sh/u58nup03","slide":5,"text":"React + Vite\nLive cluster operations","textPreview":"React + Vite | Live cluster operations","textChars":36,"textLines":2,"bbox":[938,382,200,52]}
+{"kind":"textbox","id":"sh/f6h4nuho","slide":5,"text":"AWS EC2  •  Gunicorn  •  Nginx  •  SQLite","textPreview":"AWS EC2  •  Gunicorn  •  Nginx  •  SQLite","textChars":41,"textLines":1,"bbox":[48,570,1180,24]}
+{"kind":"notes","id":"nt/0l3v6e","slide":5,"text":""}
+{"kind":"slide","id":"sl/wn3adi","slide":6,"title":"IMPACT & REVENUE MODEL","textShapes":13}
+{"kind":"shape","id":"sh/wfetwvup","slide":6,"bbox":[48,42,164,28]}
+{"kind":"textbox","id":"sh/ve5snqt4","slide":6,"text":"IMPACT & REVENUE MODEL","textPreview":"IMPACT & REVENUE MODEL","textChars":22,"textLines":1,"bbox":[60,49,140,14]}
+{"kind":"textbox","id":"sh/udwbulcj","slide":6,"text":"One connected journey creates value for every participant.","textPreview":"One connected journey creates value for every participant.","textChars":58,"textLines":1,"bbox":[48,94,1120,72]}
+{"kind":"textbox","id":"sh/5k7at0b6","slide":6,"text":"KMRL UNIFIED TICKETING  /  06","textPreview":"KMRL UNIFIED TICKETING  /  06","textChars":29,"textLines":1,"bbox":[48,678,360,16]}
+{"kind":"shape","id":"sh/4jyt0fal","slide":6,"bbox":[48,218,350,300]}
+{"kind":"textbox","id":"sh/jipsrat0","slide":6,"text":"Passengers","textPreview":"Passengers","textChars":10,"textLines":1,"bbox":[76,252,290,32]}
+{"kind":"textbox","id":"sh/ihgby5sv","slide":6,"text":"Premium, guided journey","textPreview":"Premium, guided journey","textChars":23,"textLines":1,"bbox":[76,310,280,42]}
+{"kind":"textbox","id":"sh/lonahgb2","slide":6,"text":"One booking, one payment, pickup-zone and driver guidance.","textPreview":"One booking, one payment, pickup-zone and driver guidance.","textChars":58,"textLines":1,"bbox":[76,382,280,88]}
+{"kind":"shape","id":"sh/knu9obuh","slide":6,"bbox":[438,218,350,300]}
+{"kind":"textbox","id":"sh/a9knat8f","slide":6,"text":"Drivers","textPreview":"Drivers","textChars":7,"textLines":1,"bbox":[466,252,290,32]}
+{"kind":"textbox","id":"sh/bad4jyp0","slide":6,"text":"Ready passenger clusters","textPreview":"Ready passenger clusters","textChars":24,"textLines":1,"bbox":[466,310,280,42]}
+{"kind":"textbox","id":"sh/wbm5cjql","slide":6,"text":"Exact names, destinations, zones, fare, and a simple accept-to-complete flow.","textPreview":"Exact names, destinations, zones, fare, and a simple accept-to-complete flow.","textChars":77,"textLines":1,"bbox":[466,382,280,88]}
+{"kind":"shape","id":"sh/xcvmlo76","slide":6,"bbox":[828,218,350,300]}
+{"kind":"textbox","id":"sh/yd4net8r","slide":6,"text":"KMRL","textPreview":"KMRL","textChars":4,"textLines":1,"bbox":[856,252,290,32]}
+{"kind":"textbox","id":"sh/jed4nypc","slide":6,"text":"Proposed last-mile revenue","textPreview":"Proposed last-mile revenue","textChars":26,"textLines":1,"bbox":[856,310,280,42]}
+{"kind":"textbox","id":"sh/kfm5g36h","slide":6,"text":"15% partner-driver commission. 100% feeder fare retention for KMRL-operated feeder buses.","textPreview":"15% partner-driver commission. 100% feeder fare retention for KMRL-operated feeder buses.","textChars":89,"textLines":1,"bbox":[856,382,280,88]}
+{"kind":"textbox","id":"sh/5gvmp872","slide":6,"text":"Prototype proposal: listed routes, fares, zones, and revenue assumptions are demo data and require operational validation before production use.","textPreview":"Prototype proposal: listed routes, fares, zones, and revenue assumptions are demo data and require operational validation before producti...","textChars":144,"textLines":1,"bbox":[48,584,1180,32]}
+{"kind":"notes","id":"nt/wn3adi","slide":6,"text":""}
+{"kind":"slide","id":"sl/jk46t3","slide":7,"title":"THE OPPORTUNITY","textShapes":8}
+{"kind":"shape","id":"sh/65cba1ov","slide":7,"bbox":[48,56,164,28]}
+{"kind":"textbox","id":"sh/t83algnm","slide":7,"text":"THE OPPORTUNITY","textPreview":"THE OPPORTUNITY","textChars":15,"textLines":1,"bbox":[60,63,140,14]}
+{"kind":"textbox","id":"sh/s7utcb61","slide":7,"text":"Kochi Metro can own\nthe complete journey.","textPreview":"Kochi Metro can own | the complete journey.","textChars":41,"textLines":2,"bbox":[48,150,900,162]}
+{"kind":"textbox","id":"sh/falcnq5c","slide":7,"text":"Not just a metro ticket — a reliable connection from station to destination.","textPreview":"Not just a metro ticket — a reliable connection from station to destination.","textChars":76,"textLines":1,"bbox":[52,350,820,40]}
+{"kind":"shape","id":"sh/e9cbelo7","slide":7,"bbox":[52,454,1176,0]}
+{"kind":"textbox","id":"sh/1cnup0ni","slide":7,"text":"Passenger confidence","textPreview":"Passenger confidence","textChars":20,"textLines":1,"bbox":[52,492,250,28]}
+{"kind":"textbox","id":"sh/gbetgv6x","slide":7,"text":"Driver efficiency","textPreview":"Driver efficiency","textChars":17,"textLines":1,"bbox":[420,492,250,28]}
+{"kind":"textbox","id":"sh/3y5crq5o","slide":7,"text":"KMRL visibility","textPreview":"KMRL visibility","textChars":15,"textLines":1,"bbox":[788,492,250,28]}
+{"kind":"textbox","id":"sh/2dwbilo3","slide":7,"text":"One ticket. One journey. One connected mobility system.","textPreview":"One ticket. One journey. One connected mobility system.","textChars":55,"textLines":1,"bbox":[52,576,1000,34]}
+{"kind":"textbox","id":"sh/o7u14zat","slide":7,"text":"Live demo: Passenger Portal → Flask API → Driver Portal","textPreview":"Live demo: Passenger Portal → Flask API → Driver Portal","textChars":55,"textLines":1,"bbox":[52,632,700,20]}
+{"kind":"notes","id":"nt/jk46t3","slide":7,"text":""}
