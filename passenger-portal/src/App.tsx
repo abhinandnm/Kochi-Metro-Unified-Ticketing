@@ -574,8 +574,8 @@ export default function App() {
             selected={journeyKind === 'orbit'}
             onClick={() => setJourneyKind('orbit')}
             icon={<Sparkles />}
-            title="Unified Last-Mile Coordination"
-            subtitle="Metro + capacity-matched shared ride"
+            title="Unified Ticket"
+            subtitle="Metro + shared ride to your destination"
             fare={quotes.orbit ? `₹${quotes.orbit.fare}` : '—'}
             recommended
           />
@@ -587,8 +587,8 @@ export default function App() {
             <div className="orbit-heading">
               <div className="sparkle-orb"><Sparkles size={18} /></div>
               <div>
-                <strong>Capacity-Aware Coordination</strong>
-                <p>Corridor-matched last-mile ride to your destination</p>
+                <strong>One Ticket, One Journey</strong>
+                <p>Metro and shared last-mile travel in one booking</p>
               </div>
               <span className="match-chip"><UsersRound size={14} /> Smart Cluster</span>
             </div>
