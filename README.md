@@ -1,103 +1,165 @@
 # Kochi Metro Unified Ticketing
 
-Kochi Metro Unified Ticketing is a smart metro and last-mile journey platform. It uses destination-aware passenger grouping, nearest-station mapping, and pickup-zone assignment to bring ticket booking, shared feeder transport, guidance, and driver operations into one connected experience. This repository contains independent passenger and driver React portals plus a Flask REST API, deployed in production on AWS EC2.
+Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobility platform. It integrates destination-aware passenger grouping, nearest-station mapping, dynamic pickup-zone assignment, safety verification, and driver operations into one connected experience. The platform consists of independent passenger and driver React portals plus a Flask REST API with SQLite/PostgreSQL persistence.
 
-> **Codex Nightline prototype:** This project was built as a solo prototype for **Codex Nightline**, the AI build sprint hosted with Kochi Metro Rail Limited at Vyttila Metro Station. It was selected among the **Top 10 finalists out of 100 curated builders**.
+> **Codex Nightline prototype:** Built for **Codex Nightline**, the AI build sprint hosted with Kochi Metro Rail Limited at Vyttila Metro Station, and selected among the **Top 10 finalists out of 100 curated builders**.
 >
-
-> **Competition snapshot:** The `product-made-in-competition` branch preserves the original prototype created during the two-hour sprint. No further updates are made to that branch; ongoing development happens on `main`.
+> **Competition snapshot:** The `product-made-in-competition` branch preserves the original prototype created during the sprint. Ongoing production-grade improvements happen on `main`.
 >
-> **Service availability:** The AWS backend exists for this prototype demonstration and may be stopped after the hackathon.
+> **Prototype notice:** Stations, destinations, pickup zones, routes, fares, vehicle details, and driver data shown in this application are representative prototype data.
 
-> **Prototype notice:** All stations, final destinations, pickup zones, routes, fares, vehicle details, and driver data shown in this application are representative demo data for prototyping. They may differ from real-world KMRL operations and should be validated against official operational data before production use.
+---
 
 ## Applications
 
-- `passenger-portal` — traveller booking experience
-- `driver-portal` — driver operations experience
-- `backend` — API, SQLite persistence, and clustering engine
+- `passenger-portal` — Passenger booking, QR digital pass, live trip tracking, and SOS emergency experience.
+- `driver-portal` — Driver availability, smart cluster assignment, passenger OTP verification, zone navigation, and earnings wallet.
+- `backend` — Flask REST API, HMAC token authentication, RBAC, non-destructive clustering engine, dynamic fare engine, and SOS dispatcher.
 
-## Live portals
+---
 
-- [Passenger Booking Portal](https://kochi-metro-booking.vercel.app/) — live ticket and unified journey booking experience
-- [Driver Portal](https://driverportal-rho.vercel.app/) — live driver cluster, trip, and earnings experience
+## Live Portals
 
+- [Passenger Booking Portal](https://kochi-metro-booking.vercel.app/) — Live unified ticket booking experience.
+- [Driver Portal](https://driverportal-rho.vercel.app/) — Live driver cluster assignment, trip lifecycle, and earnings.
 
+---
 
-## What Unified Ticketing solves
+## Core Capabilities & Architecture
 
-Metro adoption often breaks at the first and last mile: passengers do not know how to reliably reach a station or complete the trip after exiting one. This creates dependence on private vehicles and fragmented, untracked payments. Unified Ticketing creates a single passenger journey from station entry through shared feeder transport to the final destination.
+```
+                    ┌───────────────────────────────┐
+                    │      Client Applications      │
+                    └───────────────┬───────────────┘
+                                    │
+             ┌──────────────────────┴──────────────────────┐
+             ▼                                             ▼
+┌─────────────────────────┐                   ┌─────────────────────────┐
+│    Passenger Portal     │                   │      Driver Portal      │
+│ (React/Vite - Polling)  │                   │ (React/Vite - Polling)  │
+└────────────┬────────────┘                   └────────────┬────────────┘
+             │                                             │
+             │ Authorization: Bearer <HMAC-SHA256 Token>   │
+             └──────────────────────┬──────────────────────┘
+                                    ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                          Flask REST Backend                           │
+│ ┌─────────────────────────┬─────────────────────────┬───────────────┐ │
+│ │  Dynamic Fare Engine    │ Dynamic Pickup Zones    │ Cluster Engine│ │
+│ ├─────────────────────────┼─────────────────────────┼───────────────┤ │
+│ │  RBAC & Token Security  │ Trip Lifecycle & OTP    │ SOS Dispatcher│ │
+│ └─────────────────────────┴─────────────────────────┴───────────────┘ │
+└───────────────────────────────────┬───────────────────────────────────┘
+                                    ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                        SQLite Database (orbit)                        │
+│   [drivers]  ──(1:N)──  [clusters]  ──(1:N)──  [bookings]             │
+│   [sos_alerts]          [idempotency_keys]                            │
+└───────────────────────────────────────────────────────────────────────┘
+```
 
-The product focuses on:
-
-- reducing uncertainty around the last-mile handoff with station, zone, and driver guidance
-- grouping riders travelling toward nearby final destinations to make shared travel practical
-- giving drivers ready-made passenger clusters instead of individual, inefficient trips
-- providing a unified journey experience instead of disconnected metro and cab bookings
-- creating a premium, hassle-free passenger experience with one booking, one payment, and guided handoffs
-- keeping travel budget-friendly by sharing the last-mile ride among passengers heading toward compatible destinations
-
-## Revenue leakage prevention
-
-- Each passenger journey is created through the Flask API and stored with a booking status, fare, origin, final destination, assigned zone, and timestamp.
-- Unified Booking keeps the metro and last-mile fare in one tracked record instead of relying on informal, unrecorded feeder payments.
-- Driver acceptance is API-backed: a cluster can be claimed only by an online driver, which creates a clear assignment trail.
-- Driver wallet and earnings data supports reconciliation of completed feeder trips.
-- The API’s admin overview exposes booking, open-cluster, and driver-availability counts for operational monitoring.
-- QR-ticket and gate guidance give the prototype a clear place to connect ticket validation and payment reconciliation in a production KMRL integration.
-
-## Proposed KMRL revenue model
-
-- KMRL receives a proposed **15% commission** on each last-mile trip completed by a partner driver through the Driver Portal.
-- For a KMRL-operated feeder bus, KMRL retains **100% of the applicable feeder fare** through the unified payment flow.
-- The model turns fragmented informal last-mile payments into a measurable KMRL revenue channel while keeping shared rides more affordable for passengers.
+---
 
 ## Features
 
-### Passenger Booking Portal
+### 1. Passenger Booking Portal
+- **Role-Based Authentication:** Secure token-based session login (demo password `123`).
+- **Flexible Journey Modes:**
+  - **Standard Metro Ticket:** Direct origin-to-destination train leg.
+  - **Unified Last-Mile Coordination:** Metro train leg + capacity-matched shared feeder cab/bus.
+- **Dynamic Exit-Station Resolution:** Automatically maps destination keywords to optimal exit hubs (e.g., *Infopark/SmartCity $\rightarrow$ Vyttila*, *Lulu Mall $\rightarrow$ Edappally*, *Fort Kochi $\rightarrow$ MG Road*).
+- **Interactive Tiered Fare Breakdown:**
+  - Live cost transparency: **Metro Leg** + **Last-Mile Base** + **Distance Charge** minus **15% Shared Cluster Discount**.
+  - Commercial distribution model (75% driver share, 15% KMRL component, 10% operations).
+- **Driver Availability & Graceful Fallback:** Real-time seat capacity check with 4 actionable alternatives if vehicles are offline.
+- **Idempotency & Duplicate Protection:** Server-side request deduplication (`Idempotency-Key`) preventing accidental double bookings.
+- **Safety OTP Pass:** Cryptographically random 4-digit safety code generated for driver verification.
+- **Live Trip Lifecycle Tracker:** Tracks backend stages (`driver_assigned` $\rightarrow$ `arriving` $\rightarrow$ `arrived` $\rightarrow$ `in_transit` $\rightarrow$ `completed`).
+- **Emergency SOS Dispatcher:** Real-time emergency trigger sending browser GPS coordinates and trip details to backend `sos_alerts`.
+- **Live Trip Sharing:** Shareable emergency tracking link for family contacts.
 
-- Prototype sign-in with any username and demo password `123` (with persistent prototype disclaimer banner)
-- Station-only start selection and final-destination dropdown choices with dynamic route-based fare calculation
-- Standard metro ticket and recommended Unified Booking choices with real-time driver availability check
-- **Driver Availability & Graceful Fallback:** If zero feeder drivers are currently online in the zone, riders are immediately notified with a contextual alert and guided to continue with a Standard Metro ticket
-- Unified metro, shared last-mile, and single-payment journey summary
-- Destination-aware smart grouping with nearest-station and pickup-zone assignment
-- Guided rider flow: booking, station boarding confirmation, metro journey, arrival-zone handoff, cab/feeder confirmation, and final-destination completion
-- Live driver-assignment status and in-app travel-partner help action
+### 2. Driver Partner Operations Portal
+- **Driver Availability & Vehicle Selector:** Toggle `AVAILABLE`, `BUSY`, or `OFFLINE` status; select active vehicle type (**Sedan EV 4-seat**, **SUV 6-seat**, or **Feeder Bus 20-seat**).
+- **Vehicle-Class Cluster Filtering:** Drivers only receive clusters matching their vehicle type and capacity (sedan drivers never see feeder buses).
+- **Cluster Intelligence Card:** Route, grouped rider count, ETA, dynamic bay, detour buffer (+min), and match score (0–100%).
+- **Turn-by-Turn Navigation:** Direct integration with Google Maps to the assigned station pickup bay.
+- **Trip Lifecycle Controls:**
+  - `Accept Cluster` $\rightarrow$ `Signal En Route (arriving)` $\rightarrow$ `Signal Arrived at Bay (arrived)` $\rightarrow$ `Verify Passenger OTP & Start` $\rightarrow$ `Complete & Settle`.
+- **Driver Wallet & History:** Instant 75% last-mile fare credit to wallet upon completion, with chronological ride logs.
+
+### 3. Backend Engine & Routing Intelligence
+- **Corridor Smart Grouping:** Groups passengers heading along identical urban transit corridors.
+- **Hard Constraint Enforcement:**
+  - `MAX_WAIT_TIME = 10 min`: Groups exceeding 10 min wait are split into smaller approved clusters.
+  - `MAX_DETOUR = 15 min`: Detour deviations strictly enforced before cluster creation.
+  - `ZONE_CAPACITY = 2`: Dynamically balances station pickup bays across Zones A, B, C, and D.
+- **Demand-Responsive Feeder Bus Allocation:** Automatically consolidates corridor demand into a 20-passenger Feeder Bus when unassigned riders reach $\ge 10$.
+- **Non-Destructive Clustering:** In-flight driver cluster claims are preserved when new passenger bookings arrive.
+
+### 4. Security & Access Control (RBAC)
+- **Token Security:** Stateless HMAC-SHA256 bearer tokens.
+- **IDOR Protection:** Passengers can access only their own bookings; cross-account access is rejected (`403 Forbidden`).
+- **OTP Privacy:** Universal backdoor (`4721`) removed; passenger secret OTPs are masked from cluster feeds.
+- **Client Forgery Protection:** Fares, payouts, passenger identities, and driver IDs are computed strictly server-side.
+
+---
+
+## API Reference Summary
+
+| Method | Endpoint | Access Role | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Public | Authenticates passenger, driver, or admin (password: `123`). |
+| `GET` | `/api/stations` | Public | Returns list of metro stations and dynamic pickup zones. |
+| `POST` | `/api/journeys/quote` | Public | Calculates tiered dynamic fare quote and driver availability. |
+| `POST` | `/api/bookings` | Passenger | Idempotent booking creation with OTP and dynamic zone assignment. |
+| `GET` | `/api/bookings/:id` | Owner / Admin | Secure booking status and driver details (IDOR protected). |
+| `POST` | `/api/bookings/:id/cancel`| Owner / Admin | Cancels booking and recalculates cluster fare. |
+| `GET` | `/api/clusters` | Driver / Admin | Returns filtered clusters matching driver vehicle capacity. |
+| `POST` | `/api/clusters/:id/accept` | Driver | Atomically claims open cluster for the authenticated driver. |
+| `POST` | `/api/clusters/:id/arriving`| Driver | Signals vehicle is en route to pickup bay. |
+| `POST` | `/api/clusters/:id/arrived` | Driver | Signals vehicle has arrived at pickup bay. |
+| `POST` | `/api/clusters/:id/start-trip`| Driver | Verifies passenger OTP and transitions trip to `in_transit`. |
+| `POST` | `/api/clusters/:id/complete`| Driver / Admin | Completes trip, settles fare, and credits driver wallet. |
+| `POST` | `/api/clusters/:id/cancel-driver` | Driver / Admin | Cancels driver assignment and resets cluster to open search. |
+| `POST` | `/api/sos` | Passenger | Dispatches emergency SOS alert with GPS telemetry. |
+| `GET` | `/api/admin/metrics` | Admin | Returns operational analytics and commercial revenue splits. |
+
+---
+
+## Local Development
+
+### Backend
+```bash
+cd backend
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Linux/macOS:
+source .venv/bin/activate
+
+pip install -r requirements.txt
+python test_api.py   # Run integration tests
+flask --app app run --port 8000 --debug
+```
+
+### Passenger Portal
+```bash
+cd passenger-portal
+npm install
+npm run dev
+```
 
 ### Driver Portal
+```bash
+cd driver-portal
+npm install
+npm run dev
+```
 
-- Online/offline availability controls that synchronize in real-time with the backend dispatch engine
-- Nearby grouped-passenger cluster card with route, rider count, fare, and ETA
-- Multi-tier vehicle support: dynamically displays assigned Cab (1–5 riders) or Feeder Bus (10–20 riders)
-- Sequential trip queue: handles single-driver multi-passenger queues seamlessly
-- Accept, start, and complete trip workflow
-- Earnings, wallet, navigation, and trip-history entry points
+---
 
-### Backend API and smart grouping
+## Prototype Sign-In
 
-- Flask REST API with Flask-CORS and SQLite storage designed for a future PostgreSQL replacement
-- **Dynamic Fare Engine:** Calculates approx metro fares based on station hops and last-mile feeder charges based on destination distance
-- **Smart Grouping & Fleet Allocation:**
-  - Grouping passengers sharing the same destination zone and handoff station
-  - 1 to 5 passengers: Grouped into a single 5-seater cab
-  - 6 to 9 passengers: Split across two 5-seater cabs (e.g. 5 in one cab, remainder in another)
-  - 10 to 20 passengers: Consolidated into a high-capacity Metro Feeder Bus
-- Passenger booking, station lookup, journey quotes, driver availability tracking (`/api/drivers/status`), cluster acceptance, and admin overview endpoints
-- Destination-aware nearest-station mapping and pickup-zone assignment for grouped last-mile riders
-- Gunicorn, Nginx, and systemd production configuration for Ubuntu EC2
-
-## Deployment
-
-- Passenger and Driver applications are independently deployed to Vercel.
-- Flask API is deployed on AWS EC2 and served through Nginx.
-- The deployed API is secured with HTTPS, Gunicorn workers, systemd restart management, and Nginx reverse proxying on AWS EC2.
-
-
-## Local development
-
-Install the frontend dependencies in each portal, then run `npm run dev`. For the API, create a Python virtual environment, install `backend/requirements.txt`, and run `flask --app app run --debug` from `backend`.
-
-## Prototype sign-in
-
-Use any username with password `123` in the Passenger Portal prototype.
+- **Passenger Portal:** Any passenger name with demo password `123`.
+- **Driver Portal:** Driver name (e.g. `Rakesh Kumar`, `Anil Varma`) with demo password `123`.
+- **Admin Endpoints:** Admin token with password `123` or `kmrladmin123`.
