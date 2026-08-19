@@ -362,7 +362,7 @@ export default function App() {
       const headers: HeadersInit = {
         'Content-Type': 'application/json',
         ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-        'Idempotency-Key': `booking-${userName.trim()}-${from}-${to}-${Date.now()}`
+        'Idempotency-Key': `booking-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
       }
       const response = await fetch(`${apiBase}/bookings`, {
         method: 'POST',
