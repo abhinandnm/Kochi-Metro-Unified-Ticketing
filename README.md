@@ -4,7 +4,7 @@ Kochi Metro Unified Ticketing is a smart metro and last-mile journey platform. I
 
 > **Codex Nightline prototype:** This project was built as a solo prototype for **Codex Nightline**, the AI build sprint hosted with Kochi Metro Rail Limited at Vyttila Metro Station. It was selected among the **Top 10 finalists out of 100 curated builders**.
 >
-<<<<<<< HEAD
+
 > **Competition snapshot:** The `product-made-in-competition` branch preserves the original prototype created during the two-hour sprint. No further updates are made to that branch; ongoing development happens on `main`.
 >
 > **Service availability:** The AWS backend exists for this prototype demonstration and may be stopped after the hackathon.
