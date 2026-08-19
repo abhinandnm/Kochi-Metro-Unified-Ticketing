@@ -593,10 +593,12 @@ export default function App() {
               <span className="match-chip"><UsersRound size={14} /> Smart Cluster</span>
             </div>
 
-            {/* Live Availability Preview (Point 9 & 1) */}
-            <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#166534', margin: '10px 0' }}>
-              <strong>✓ Availability Status:</strong> Vehicle capacity available ({quotes.orbit?.available_capacity ?? 8} seats open) · Est. Pickup: ~5 min
-            </div>
+            {/* Live Availability Preview */}
+            {!isUnifiedUnavailable && (
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '10px 12px', borderRadius: '10px', fontSize: '12px', color: '#166534', margin: '10px 0' }}>
+                <strong>✓ Availability Status:</strong> Drivers online ({quotes.orbit?.available_capacity ?? 4} seats open) · Est. Pickup: ~5 min
+              </div>
+            )}
 
             <div className="timeline">
               <TimelineRow icon={<TrainFront size={17} />} title="1. Board Metro Ticket" meta="Covers origin-to-handoff transit" />
@@ -606,11 +608,11 @@ export default function App() {
           </section>
         )}
 
-        {/* Zero Capacity Fallback Message (Point 1 & 9) */}
+        {/* Zero Capacity / Offline Fallback Message */}
         {journeyKind === 'orbit' && isUnifiedUnavailable && (
           <div style={{ background: '#fff1f0', border: '1px solid #ffccc7', borderRadius: '13px', padding: '14px', color: '#cf1322', fontSize: '12px', margin: '14px 0' }}>
-            <strong>⚠️ No last-mile vehicle currently available:</strong>
-            <p style={{ margin: '4px 0 8px 0' }}>All feeder cabs at your destination station are currently at full capacity.</p>
+            <strong>⚠️ No last-mile drivers currently available:</strong>
+            <p style={{ margin: '4px 0 8px 0' }}>Feeder drivers at your destination station are currently offline or unavailable.</p>
             <div style={{ fontWeight: 'bold', marginBottom: '6px' }}>Alternative Options:</div>
             <ul style={{ margin: 0, paddingLeft: '18px' }}>
               <li>Use KMRL scheduled feeder bus service</li>

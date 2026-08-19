@@ -14,15 +14,12 @@ import {
   ShieldCheck,
   KeyRound,
   AlertTriangle,
-  BarChart3,
   RefreshCw,
-  XCircle,
-  Sliders,
-  DollarSign
+  XCircle
 } from 'lucide-react'
 
 type TripState = 'available' | 'accepted' | 'riding' | 'complete'
-type PortalView = 'trips' | 'history' | 'wallet' | 'simulator'
+type PortalView = 'trips' | 'history' | 'wallet'
 type Passenger = { id: number; passenger_name: string; destination: string; status: string; otp?: string }
 type Cluster = {
   id: number
@@ -64,11 +61,6 @@ export default function App() {
   // OTP Verification state
   const [otpInput, setOtpInput] = useState('')
   const [otpError, setOtpError] = useState('')
-
-  // Simulator state
-  const [simDailyPassengers, setSimDailyPassengers] = useState(1000)
-  const [simAvgFare, setSimAvgFare] = useState(80)
-  const [simKmrlComm, setSimKmrlComm] = useState(10)
 
   const [authToken, setAuthToken] = useState<string>(() => localStorage.getItem('kmrl_driver_token') || '')
   const [driverTripStage, setDriverTripStage] = useState<'open' | 'accepted' | 'arriving' | 'arrived' | 'in_transit' | 'completed'>('open')
@@ -294,12 +286,6 @@ export default function App() {
     )
   }
 
-  // Simulation calculations
-  const simGrossRevenue = simDailyPassengers * simAvgFare
-  const simKmrlRevenue = Math.round(simGrossRevenue * (simKmrlComm / 100))
-  const simDriverPayout = Math.round(simGrossRevenue * 0.75)
-  const simOpsCost = simGrossRevenue - simKmrlRevenue - simDriverPayout
-
   const tripsView = trip === 'complete' ? (
     <section className="completed">
       <CheckCircle2 size={42} color="#059669" />
@@ -504,108 +490,6 @@ export default function App() {
     </>
   )
 
-  const simulatorView = (
-    <>
-      <div className="section-title">
-        <div>
-          <small>KMRL MANAGEMENT TOOL</small>
-          <h2>Business Economics Simulator</h2>
-        </div>
-      </div>
-
-      <section style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0369a1', fontWeight: 'bold', marginBottom: '12px' }}>
-          <BarChart3 size={18} /> Today's Unified Operational Metrics
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-          <div style={{ background: '#f0f9ff', padding: '10px', borderRadius: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#64748b' }}>Vehicle Occupancy</span>
-            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0369a1' }}>3.4 / 4 (85%)</div>
-          </div>
-          <div style={{ background: '#f0fdf4', padding: '10px', borderRadius: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#64748b' }}>Feeder Bus Demand</span>
-            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#15803d' }}>34 / 40 seats (85%)</div>
-          </div>
-        </div>
-
-        <div style={{ fontSize: '12px', color: '#334155', lineHeight: '1.6', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Estimated Daily Revenue:</span>
-            <strong>₹43,800</strong>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#059669' }}>
-            <span>Driver Payouts (75%):</span>
-            <strong>₹34,000</strong>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0284c7' }}>
-            <span>KMRL Revenue Share (15%):</span>
-            <strong>₹5,300</strong>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b' }}>
-            <span>Platform Operations:</span>
-            <strong>₹4,500</strong>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontWeight: 'bold', marginBottom: '12px' }}>
-          <Sliders size={18} /> Scenario Modeler
-        </div>
-
-        <label style={{ display: 'block', fontSize: '12px', marginBottom: '10px' }}>
-          Daily Unified Passengers: <strong>{simDailyPassengers}</strong>
-          <input
-            type="range"
-            min={100}
-            max={5000}
-            step={100}
-            value={simDailyPassengers}
-            onChange={(e) => setSimDailyPassengers(Number(e.target.value))}
-            style={{ width: '100%', marginTop: '4px' }}
-          />
-        </label>
-
-        <label style={{ display: 'block', fontSize: '12px', marginBottom: '10px' }}>
-          Average Last-Mile Fare: <strong>₹{simAvgFare}</strong>
-          <input
-            type="range"
-            min={40}
-            max={150}
-            step={5}
-            value={simAvgFare}
-            onChange={(e) => setSimAvgFare(Number(e.target.value))}
-            style={{ width: '100%', marginTop: '4px' }}
-          />
-        </label>
-
-        <label style={{ display: 'block', fontSize: '12px', marginBottom: '14px' }}>
-          Partner Commission: <strong>{simKmrlComm}%</strong>
-          <input
-            type="range"
-            min={5}
-            max={25}
-            step={1}
-            value={simKmrlComm}
-            onChange={(e) => setSimKmrlComm(Number(e.target.value))}
-            style={{ width: '100%', marginTop: '4px' }}
-          />
-        </label>
-
-        <div style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '13px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-            <span>Estimated Gross:</span>
-            <strong>₹{simGrossRevenue.toLocaleString()}</strong>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0369a1', fontWeight: 'bold' }}>
-            <span>Estimated KMRL Component:</span>
-            <span>₹{simKmrlRevenue.toLocaleString()}</span>
-          </div>
-        </div>
-      </section>
-    </>
-  )
-
   return (
     <main className="driver-shell">
       <header>
@@ -681,7 +565,7 @@ export default function App() {
         </div>
 
         {apiError && <p className="driver-error">{apiError}</p>}
-        {activeView === 'trips' ? tripsView : activeView === 'history' ? historyView : activeView === 'wallet' ? walletView : simulatorView}
+        {activeView === 'trips' ? tripsView : activeView === 'history' ? historyView : walletView}
       </section>
 
       <nav>
@@ -696,10 +580,6 @@ export default function App() {
         <button className={activeView === 'wallet' ? 'active' : ''} onClick={() => setActiveView('wallet')}>
           <Wallet size={19} />
           <span>Wallet</span>
-        </button>
-        <button className={activeView === 'simulator' ? 'active' : ''} onClick={() => setActiveView('simulator')}>
-          <BarChart3 size={19} />
-          <span>Simulator</span>
         </button>
       </nav>
     </main>
