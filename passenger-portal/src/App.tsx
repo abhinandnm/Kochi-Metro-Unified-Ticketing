@@ -376,6 +376,11 @@ export default function App() {
           muted
           playsInline
           className="login-bg-video"
+          onTimeUpdate={(e) => {
+            if (e.currentTarget.currentTime >= 7) {
+              e.currentTarget.currentTime = 0
+            }
+          }}
         >
           <source src="/metro-bg.mp4" type="video/mp4" />
         </video>
