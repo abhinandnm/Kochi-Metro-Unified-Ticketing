@@ -173,6 +173,8 @@ export default function App() {
       }
     }
     void loadQuotes()
+    const timer = window.setInterval(() => void loadQuotes(), 3000)
+    return () => window.clearInterval(timer)
   }, [from, to])
 
   const [authToken, setAuthToken] = useState<string>(() => localStorage.getItem('kmrl_passenger_token') || '')
