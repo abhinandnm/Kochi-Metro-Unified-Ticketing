@@ -624,17 +624,6 @@ export default function App() {
             Continue <span>→</span>
           </button>
           {loginError && <small className="login-error">{loginError}</small>}
-          <div style={{ marginTop: '16px', textAlign: 'center' }}>
-            <button
-              onClick={() => {
-                window.history.pushState({}, '', '/admin')
-                setIsAdminView(true)
-              }}
-              style={{ background: 'none', border: 'none', color: '#0f766e', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
-            >
-              ⚙ Open KMRL OCC Admin Monitor (/admin)
-            </button>
-          </div>
         </main>
       </div>
     )
@@ -707,12 +696,7 @@ export default function App() {
       {/* Header & Brand */}
       <section className="hero-panel">
         <div className="topbar">
-          <button 
-            style={{ background: 'rgba(255, 255, 255, 0.2)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.4)', borderRadius: '8px', padding: '5px 10px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', backdropFilter: 'blur(4px)' }}
-            onClick={() => setIsAdminView(true)}
-          >
-            OCC Admin ⚙
-          </button>
+          <span />
           <div className="brand">
             <span className="brand-mark">K</span>
             <span>KOCHI METRO</span>

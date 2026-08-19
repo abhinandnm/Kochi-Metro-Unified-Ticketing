@@ -20,8 +20,21 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 
 ## Live Portals
 
-- [Passenger Booking Portal](https://kochi-metro-booking.vercel.app/) — Live unified ticket booking experience.
-- [Driver Portal](https://driverportal-rho.vercel.app/) — Live driver cluster assignment, trip lifecycle, and earnings.
+| Portal | URL | Description |
+| :--- | :--- | :--- |
+| 🚆 **Passenger Booking Portal** | [kochi-metro-booking.vercel.app](https://kochi-metro-booking.vercel.app/) | Live unified ticket booking experience with dynamic last-mile feeder options. |
+| 🚖 **Driver Partner Portal** | [driverportal-rho.vercel.app](https://driverportal-rho.vercel.app/) | Live driver cluster acceptance, OTP validation, and wallet earnings. |
+| 🚨 **KMRL OCC Operations Center** | [kochi-metro-booking.vercel.app/admin](https://kochi-metro-booking.vercel.app/admin) | **OCC Command Center (`/admin`)**: Live Emergency SOS incident feed, network metrics, and 1-click test queue wiper. |
+
+---
+
+> ### 🚨 KMRL OCC Operations & Safety Command Center (`/admin`)
+> Access the live transit operations & incident response cockpit directly by appending **`/admin`** to the domain:
+> 👉 **[Open KMRL OCC Admin Monitor (`/admin`)](https://kochi-metro-booking.vercel.app/admin)**
+>
+> - **🚨 Emergency SOS Incident Feed:** Live stream of passenger emergency triggers with driver name, vehicle plate, GPS route corridor, and instant OCC dispatch controls.
+> - **📊 Real-Time Network KPIs:** Live revenue breakdown (75% driver share, 45% KMRL component), vehicle fleet utilization, and corridor passenger demand.
+> - **🧹 1-Click Passenger Queue Reset:** Admin button (`Wipe Passenger Queue`) to instantly purge abandoned prototype test bookings from the database.
 
 ---
 
