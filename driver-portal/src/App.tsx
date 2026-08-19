@@ -73,7 +73,35 @@ export default function App() {
     }
   }
 
-  const [showDisclaimer, setShowDisclaimer] = useState(true)
+  const toggleOnline = async () => {
+    const nextState = !online
+    setOnline(nextState)
+    if (username.trim()) {
+      try {
+        await fetch(`${apiBase}/drivers/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ driver_name: username.trim(), online: nextState })
+        })
+      } catch {}
+    }
+  }
+
+  const handleSignIn = async () => {
+    if (username.trim() && password === '123') {
+      setSignedIn(true)
+      setLoginError('')
+      try {
+        await fetch(`${apiBase}/drivers/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ driver_name: username.trim(), online: true })
+        })
+      } catch {}
+    } else {
+      setLoginError('Invalid username or password.')
+    }
+  }
 
   if (!signedIn) return (
     <>
@@ -92,7 +120,7 @@ export default function App() {
         <p>Sign in to receive nearby passenger clusters.</p>
         <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="Username" />
         <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" />
-        <button className="primary" onClick={() => { if (username.trim() && password === '123') { setSignedIn(true); setLoginError('') } else setLoginError('Invalid username or password.') }}>Continue <ChevronRight size={20} /></button>
+        <button className="primary" onClick={() => void handleSignIn()}>Continue <ChevronRight size={20} /></button>
         {loginError && <small className="driver-error">{loginError}</small>}
       </main>
     </>
@@ -107,5 +135,5 @@ export default function App() {
   const historyView = <><div className="section-title"><div><small>RIDE HISTORY</small><h2>Completed trips</h2></div></div>{tripHistory.length === 0 ? <section className="empty-state"><Clock3 size={32} /><strong>No completed rides yet</strong><p>Complete an assigned passenger cluster to see it here.</p></section> : tripHistory.map((record) => <section className="history-card" key={record.id}><span className="trip-icon"><CheckCircle2 size={20} /></span><div><strong>{record.route}</strong><p>Completed at {record.completedAt}</p></div><span className="price">+₹{record.earnings}</span></section>)}</>
   const walletView = <><div className="section-title"><div><small>DRIVER WALLET</small><h2>Your earnings</h2></div></div><section className="wallet-card"><Wallet size={30} /><small>AVAILABLE BALANCE</small><strong>₹{earnings}</strong><p>{tripHistory.length === 0 ? 'Complete a ride to add earnings.' : `${tripHistory.length} completed ${tripHistory.length === 1 ? 'trip' : 'trips'} credited to your wallet.`}</p></section><section className="info-card"><strong>Live booking workflow</strong><p>Passenger details shown in Trips are loaded from the Unified Ticketing API.</p></section></>
 
-  return <main className="driver-shell"><header><div className="avatar">{initials}</div><div><small>GOOD EVENING</small><h1>{username}</h1></div><button className={`online ${online ? '' : 'off'}`} onClick={() => setOnline(!online)}><Power size={15} />{online ? 'Online' : 'Offline'}</button></header><section className="map"><div className="map-label"><Navigation size={16} /><span>{activeCluster ? `${activeCluster.origin} Metro Station` : 'Waiting for bookings'}</span></div><span className="pin one" /><span className="pin two" /><span className="route-line" /><div className="map-status"><span className="pulse" /> {online ? 'Listening for passenger clusters' : 'You are offline'}</div></section><section className="content"><div className="earnings"><div><small>TODAY’S EARNINGS</small><strong>₹{earnings}</strong><p>{tripHistory.length === 0 ? 'Complete a ride to start earning' : `${tripHistory.length} completed ${tripHistory.length === 1 ? 'trip' : 'trips'} today`}</p></div><Wallet size={25} /></div>{apiError && <p className="driver-error">{apiError}</p>}{activeView === 'trips' ? tripsView : activeView === 'history' ? historyView : walletView}</section><nav><button className={activeView === 'trips' ? 'active' : ''} onClick={() => setActiveView('trips')}><MapPin size={19} /><span>Trips</span></button><button className={activeView === 'history' ? 'active' : ''} onClick={() => setActiveView('history')}><Clock3 size={19} /><span>History</span></button><button className={activeView === 'wallet' ? 'active' : ''} onClick={() => setActiveView('wallet')}><Wallet size={19} /><span>Wallet</span></button></nav></main>
+  return <main className="driver-shell"><header><div className="avatar">{initials}</div><div><small>GOOD EVENING</small><h1>{username}</h1></div><button className={`online ${online ? '' : 'off'}`} onClick={() => void toggleOnline()}><Power size={15} />{online ? 'Online' : 'Offline'}</button></header><section className="map"><div className="map-label"><Navigation size={16} /><span>{activeCluster ? `${activeCluster.origin} Metro Station` : 'Waiting for bookings'}</span></div><span className="pin one" /><span className="pin two" /><span className="route-line" /><div className="map-status"><span className="pulse" /> {online ? 'Listening for passenger clusters' : 'You are offline'}</div></section><section className="content"><div className="earnings"><div><small>TODAY’S EARNINGS</small><strong>₹{earnings}</strong><p>{tripHistory.length === 0 ? 'Complete a ride to start earning' : `${tripHistory.length} completed ${tripHistory.length === 1 ? 'trip' : 'trips'} today`}</p></div><Wallet size={25} /></div>{apiError && <p className="driver-error">{apiError}</p>}{activeView === 'trips' ? tripsView : activeView === 'history' ? historyView : walletView}</section><nav><button className={activeView === 'trips' ? 'active' : ''} onClick={() => setActiveView('trips')}><MapPin size={19} /><span>Trips</span></button><button className={activeView === 'history' ? 'active' : ''} onClick={() => setActiveView('history')}><Clock3 size={19} /><span>History</span></button><button className={activeView === 'wallet' ? 'active' : ''} onClick={() => setActiveView('wallet')}><Wallet size={19} /><span>Wallet</span></button></nav></main>
 }

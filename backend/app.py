@@ -87,6 +87,18 @@ def create_app():
     @app.get('/api/stations')
     def stations(): return jsonify(stations=STATIONS)
 
+    @app.post('/api/drivers/status')
+    def driver_status():
+        data = request.get_json(silent=True) or {}
+        name = str(data.get('driver_name', '')).strip()
+        online = int(bool(data.get('online', True)))
+        if not name:
+            return jsonify(error='Driver name required'), 400
+        with connect() as db:
+            driver = get_or_create_driver(db, name)
+            db.execute('UPDATE drivers SET online=? WHERE id=?', (online, driver['id']))
+            return jsonify(status='ok', driver_name=name, online=bool(online))
+
     @app.post('/api/journeys/quote')
     def quote():
         data = request.get_json(silent=True) or {}
@@ -95,7 +107,9 @@ def create_app():
             return jsonify(error='Select a valid origin station and final destination.'), 400
         orbit = data.get('journey_type') == 'orbit'
         quote = journey_quote(origin, str(data['destination']), 'orbit' if orbit else 'standard')
-        return jsonify(origin=origin, destination=data['destination'], journey_type='orbit' if orbit else 'standard', pickup_zone=DESTINATION_ZONES[quote['handoff_station']] if orbit else None, **quote)
+        with connect() as db:
+            online_drivers = db.execute('SELECT COUNT(*) FROM drivers WHERE online=1').fetchone()[0]
+        return jsonify(origin=origin, destination=data['destination'], journey_type='orbit' if orbit else 'standard', pickup_zone=DESTINATION_ZONES[quote['handoff_station']] if orbit else None, online_drivers=online_drivers, drivers_available=online_drivers > 0, **quote)
 
     @app.post('/api/bookings')
     def book():
@@ -105,10 +119,14 @@ def create_app():
         origin = station_name(data['origin'])
         if origin not in STATIONS: return jsonify(error='Select a valid origin station.'), 400
         orbit = data['journey_type'] == 'orbit'
-        quote = journey_quote(origin, data['destination'], 'orbit' if orbit else 'standard')
-        station = quote['handoff_station']
-        pickup_zone = DESTINATION_ZONES[station] if orbit else None
         with connect() as db:
+            if orbit:
+                online_drivers = db.execute('SELECT COUNT(*) FROM drivers WHERE online=1').fetchone()[0]
+                if online_drivers == 0:
+                    return jsonify(error='Unified Ticketing is temporarily unavailable in your area as no feeder drivers are currently online. Please book a standard metro ticket.'), 400
+            quote = journey_quote(origin, data['destination'], 'orbit' if orbit else 'standard')
+            station = quote['handoff_station']
+            pickup_zone = DESTINATION_ZONES[station] if orbit else None
             cursor = db.execute('INSERT INTO bookings(passenger_name,origin,destination,nearest_station,journey_type,pickup_zone,fare,status) VALUES(?,?,?,?,?,?,?,?)', (data['passenger_name'].strip(), origin, data['destination'].strip(), station, 'orbit' if orbit else 'standard', pickup_zone, quote['fare'], 'confirmed'))
             booking_id = cursor.lastrowid
             if orbit:
