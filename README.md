@@ -7,6 +7,7 @@ Kochi Metro Unified Ticketing is a smart metro and capacity-aware last-mile mobi
 > **Competition snapshot:** The `product-made-in-competition` branch preserves the original prototype created during the sprint. Ongoing production-grade improvements happen on `main`.
 >
 > **Prototype notice:** Stations, destinations, pickup zones, routes, fares, vehicle details, and driver data shown in this application are representative prototype data.
+> 
 >**Service availability:** The AWS backend exists for this prototype demonstration and may be stopped after the hackathon.
 
 ---
