@@ -650,7 +650,7 @@ export default function App() {
             <strong>Prototype Disclaimer:</strong> The passenger and driver portals are proof-of-concept demonstrations and are not production systems. The station information, routes, fares, distances, passenger counts, and other operational data shown in the prototype are representative/demo data and are not intended to reflect actual KMRL fares, routes, schedules, or operational information.<br/><br/>
             The authentication in the prototype is also simplified for demonstration purposes; any username can be used with the demo password <strong>123</strong>. No real passenger, driver, payment, or KMRL data is used.<br/><br/>
             The prototype is intended solely to demonstrate the proposed workflow and user experience.<br/><br/>
-            Service availability: The AWS backend exists for this prototype demonstration and may be stopped after the hackathon
+            Service availability: The AWS backend was used for this prototype demonstration and was permanently shut down in September 2026.
           </div>
         )}
         <main className="app-shell matching login-glass-card">
